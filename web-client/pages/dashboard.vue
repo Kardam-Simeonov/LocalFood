@@ -11,7 +11,7 @@
     </header>
     <main>
         <section class="grid grid-cols-12 xl:h-[90vh]">
-            <div id="map" class="xl:col-span-8 col-span-full xl:h-full h-[50vh]"></div>
+            <div id="map" ref="mapRef" class="xl:col-span-8 col-span-full xl:h-full h-[50vh]"></div>
             <aside
                 class="xl:col-span-4 col-span-full bg-red-500 xl:h-full h-[70vh] overflow-y-auto px-8 py-12 flex flex-col">
                 <h1 class="text-4xl text-white font-semibold mb-12">Your orders</h1>
@@ -25,7 +25,7 @@
                             </div>
                         </div>
                     <p class="font-semibold">Deliver to: Loading...</p>
-                    <button class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 mt-4">Mark as sent</button>
+                    <button class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 mt-4">Mark as ready for pickup</button>
                 </div>
                 <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
                     <div class="font-bold text-xl mb-4">Order #2</div>
@@ -44,7 +44,7 @@
                             </div>
                         </div>
                     <p class="font-semibold">Deliver to: Loading...</p>
-                    <button class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 mt-4">Mark as sent</button>
+                    <button class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 mt-4">Mark as ready for pickup</button>
                 </div>
                 <div
                     class="border-dashed border-4 border-red-800 rounded-lg p-4 flex flex-col justify-center items-center min-h-[15rem]">
@@ -68,3 +68,29 @@
         </section>
     </main>
 </template>
+
+<script setup>
+import Map from 'ol/Map';
+import View from 'ol/View';
+import TileLayer from 'ol/layer/Tile';
+import OSM from 'ol/source/OSM';
+import { fromLonLat } from 'ol/proj';
+
+const mapRef = ref(null);
+
+onMounted(() => {
+    const map = new Map({
+        target: mapRef.value,
+        layers: [
+            new TileLayer({
+                source: new OSM()
+            })
+        ],
+        view: new View({
+            center: fromLonLat([23.3219, 42.6975]),
+            zoom: 12
+        }),
+        controls: [],
+    });
+});
+</script>
