@@ -1,14 +1,4 @@
 <template>
-    <header class="lg:px-16 px-4 py-6">
-        <nav class="flex justify-between">
-            <span class="text-red-700 hover:text-red-500 cursor-pointer text-4xl font-bold"
-                style="font-family: calibri;">LocalFood | Vendors</span>
-            <div class="flex items-center gap-3 cursor-pointer">
-                <span class="font-semibold text-xl">Logout</span>
-                <Icon name="material-symbols:login-rounded" class="text-3xl" />
-            </div>
-        </nav>
-    </header>
     <main>
         <section class="grid grid-cols-12 xl:h-[90vh]">
             <div id="map" ref="mapRef" class="xl:col-span-8 col-span-full xl:h-full h-[50vh]"></div>
@@ -75,6 +65,10 @@ import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 import { fromLonLat } from 'ol/proj';
+
+definePageMeta({
+  layout: 'vendor'
+})
 
 const mapRef = ref(null);
 
