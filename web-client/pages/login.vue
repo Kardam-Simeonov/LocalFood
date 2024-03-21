@@ -42,10 +42,9 @@ import { useAuthStore } from '~/store/auth'; // import the auth store we just cr
 const { authenticateUser } = useAuthStore(); // use authenticateUser action from  auth store
 
 const { authenticated } = storeToRefs(useAuthStore()); // make authenticated state reactive with storeToRefs
-
 const user = ref({
-  email: '', 
-  password: '',
+  username: 'kminchelle', 
+  password: '0lelplR',
 });
 const router = useRouter();
 

@@ -67,7 +67,8 @@ import OSM from 'ol/source/OSM';
 import { fromLonLat } from 'ol/proj';
 
 definePageMeta({
-  layout: 'vendor'
+  layout: 'vendor',
+  middleware: 'auth'
 })
 
 const mapRef = ref(null);
