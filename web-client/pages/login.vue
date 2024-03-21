@@ -9,7 +9,8 @@
             <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="email"
                 type="email"
-                placeholder="Email">
+                placeholder="Email"
+                v-model="user.username">
         </div>
         <div class="mb-6">
             <label class="block text-gray-700 font-bold mb-2" for="password">
@@ -18,15 +19,14 @@
             <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="password"
                 type="password"
-                placeholder="Password">
+                placeholder="Password"
+                v-model="user.password">
         </div>
         <p class="text-red-500 text-sm mb-4">error field</p>
         <div class="flex items-center justify-between">
-            <NuxtLink to="/dashboard">
-                <button class="bg-red-800 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Login
-                </button>
-            </NuxtLink>
+            <button @click="login()" class="bg-red-800 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Login
+            </button>
         </div>
         <div class="text-center mt-4">
             <p>Don't have an account? <NuxtLink to="/register"><span class="underline hover:no-underline cursor-pointer font-semibold">Sign up</span></NuxtLink></p>
@@ -34,3 +34,26 @@
         </div>
     </div>
 </template>
+
+<script setup>
+import { storeToRefs } from 'pinia'; // import storeToRefs helper hook from pinia
+import { useAuthStore } from '~/store/auth'; // import the auth store we just created
+
+const { authenticateUser } = useAuthStore(); // use authenticateUser action from  auth store
+
+const { authenticated } = storeToRefs(useAuthStore()); // make authenticated state reactive with storeToRefs
+
+const user = ref({
+  email: '', 
+  password: '',
+});
+const router = useRouter();
+
+const login = async () => {
+  await authenticateUser(user.value); // call authenticateUser and pass the user object
+  // redirect to dashboard if user is authenticated
+  if (authenticated) {
+    router.push('/dashboard');
+  }
+};
+</script>

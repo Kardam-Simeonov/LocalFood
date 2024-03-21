@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 
 interface UserPayloadInterface {
-  username: string;
+  email: string;
   password: string;
 }
 
@@ -11,12 +11,12 @@ export const useAuthStore = defineStore('auth', {
     loading: false,
   }),
   actions: {
-    async authenticateUser({ username, password }: UserPayloadInterface) {
+    async authenticateUser({ email, password }: UserPayloadInterface) {
       const { data, pending }: any = await useFetch('https://dummyjson.com/auth/login', {
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
         body: {
-          username,
+          email,
           password,
         },
       });
