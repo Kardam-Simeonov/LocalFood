@@ -16,7 +16,7 @@
         </div>
       </div>
     </div>
-    <img class="relative -right-24 z-0 ml-auto h-full" src="@/assets/hero_banner.jpg">
+    <img class="relative -right-24 z-0 ml-auto h-full" src="/assets/hero_banner.jpg">
   </div>
 </template>
 

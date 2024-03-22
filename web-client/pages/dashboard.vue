@@ -8,7 +8,7 @@
                 <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
                     <div class="font-bold text-xl mb-4">Order #1</div>
                         <div class="flex items-center mb-4">
-                            <img src="@/assets/cheese.jpg" alt="${product.ImageName}" class="w-16 h-16 object-cover rounded-lg mr-4">
+                            <img src="/assets/cheese.jpg" alt="${product.ImageName}" class="w-16 h-16 object-cover rounded-lg mr-4">
                             <div>
                                 <div class="font-bold">Product Title</div>
                                 <div class="text-gray-600">$3.50</div>
@@ -20,14 +20,14 @@
                 <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
                     <div class="font-bold text-xl mb-4">Order #2</div>
                         <div class="flex items-center mb-4">
-                            <img src="@/assets/cheese.jpg" alt="${product.ImageName}" class="w-16 h-16 object-cover rounded-lg mr-4">
+                            <img src="/assets/cheese.jpg" alt="${product.ImageName}" class="w-16 h-16 object-cover rounded-lg mr-4">
                             <div>
                                 <div class="font-bold">Product Title</div>
                                 <div class="text-gray-600">$3.50</div>
                             </div>
                         </div>
                         <div class="flex items-center mb-4">
-                            <img src="@/assets/cheese.jpg" alt="${product.ImageName}" class="w-16 h-16 object-cover rounded-lg mr-4">
+                            <img src="/assets/cheese.jpg" alt="${product.ImageName}" class="w-16 h-16 object-cover rounded-lg mr-4">
                             <div>
                                 <div class="font-bold">Product Title</div>
                                 <div class="text-gray-600">$3.50</div>
@@ -46,7 +46,7 @@
             <h1 class="text-4xl font-bold text-center mb-16 text-red-700">Your Products</h1>
             <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 max-w-5xl px-4 mx-auto">
                 <div class="bg-red-500 rounded-lg p-4 flex flex-col justify-between relative">
-                    <img src="@/assets/cheese.jpg" alt="Product Image" class="w-full h-56 object-cover rounded-lg mb-6">
+                    <img src="/assets/cheese.jpg" alt="Product Image" class="w-full h-56 object-cover rounded-lg mb-6">
                     <h2 class="text-xl font-bold">Product Title</h2>
                     <p class="text-lg font-semibold mt-14 mb-4">$2.50</p>
                     <button class="absolute bottom-4 right-4 bg-red-700 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">Delete</button>
