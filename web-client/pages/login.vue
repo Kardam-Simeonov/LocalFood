@@ -22,7 +22,7 @@
                 placeholder="Password"
                 v-model="user.password">
         </div>
-        <p class="text-red-500 text-sm mb-4">error field</p>
+        <p class="text-red-500 text-sm mb-4">{{ errorText }}</p>
         <div class="flex items-center justify-between">
             <button @click="login()" class="bg-red-800 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
             Login
@@ -40,19 +40,24 @@ import { storeToRefs } from 'pinia'; // import storeToRefs helper hook from pini
 import { useAuthStore } from '~/store/auth'; // import the auth store we just created
 
 const { authenticateUser } = useAuthStore(); // use authenticateUser action from  auth store
-
 const { authenticated } = storeToRefs(useAuthStore()); // make authenticated state reactive with storeToRefs
+
 const user = ref({
   username: 'kminchelle', 
   password: '0lelplR',
 });
+const errorText = ref('');
 const router = useRouter();
 
 const login = async () => {
   await authenticateUser(user.value); // call authenticateUser and pass the user object
+
   // redirect to dashboard if user is authenticated
-  if (authenticated) {
+  if (authenticated.value) {
     router.push('/dashboard');
+  }
+  else{
+    errorText.value = 'Invalid username or password';
   }
 };
 </script>
