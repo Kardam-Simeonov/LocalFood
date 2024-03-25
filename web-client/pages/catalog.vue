@@ -44,26 +44,6 @@ const catalogItems = ref([
       image: '/assets/profile.jpg'
     }
   },
-  {
-    name: 'Homemade Feta Cheese',
-    price: 5.00,
-    distance: 1.5,
-    image: '/assets/cheese.jpg',
-    seller: {
-      name: 'Ivan',
-      image: '/assets/profile.jpg'
-    }
-  },
-  {
-    name: 'Homemade Feta Cheese',
-    price: 5.00,
-    distance: 1.5,
-    image: '/assets/cheese.jpg',
-    seller: {
-      name: 'Ivan',
-      image: '/assets/profile.jpg'
-    }
-  }
 ]);
 
 definePageMeta({
