@@ -33,7 +33,6 @@
 </template>
 
 <script setup>
-const isCartOpen = ref(false);
 const catalogItems = ref([
   {
     name: 'Homemade Feta Cheese',
