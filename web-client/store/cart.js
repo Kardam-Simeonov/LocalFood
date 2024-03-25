@@ -1,4 +1,4 @@
-import { defineStore } from '@pinia/nuxt'
+import { defineStore } from 'pinia'
 
 export const useCartStore = defineStore('cart', {
   state: () => ({
@@ -10,7 +10,6 @@ export const useCartStore = defineStore('cart', {
     },
     removeFromCart(index) {
       this.items.splice(index, 1)
-      
     },
     clearCart() {
       this.items = []
