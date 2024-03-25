@@ -36,7 +36,7 @@
 import { storeToRefs } from 'pinia'; 
 import { useCartStore } from '~/store/cart'; 
 
-const { addToCart, removeFromCart, clearCart } = useCartStore(); 
+const { addToCart } = useCartStore(); 
 const { items } = storeToRefs(useCartStore()); 
 
 const catalogItems = ref([
