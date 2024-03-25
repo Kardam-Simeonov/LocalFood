@@ -7,12 +7,15 @@
         <h1 class="text-5xl mb-2 drop-shadow-lg">Shop Local, Support Local</h1>
         <h2 class="text-lg mb-6 drop-shadow-lg">Order food directly from local suppliers</h2>
         <div class="relative">
-          <input type="text" name="search" id="search" class="w-full block p-4 pr-10 rounded-md shadow-sm text-black sm:text-sm" placeholder="Enter your address...">
-          <NuxtLink to="/catalog">
-            <span class="absolute inset-y-0 right-0 flex items-center pr-3 text-2xl text-gray-600 hover:text-black cursor-pointer">
+          <input type="text" name="search" id="search"
+            ref="searchInput"
+            class="w-full block p-4 pr-10 rounded-md shadow-sm text-black sm:text-sm"
+            placeholder="Enter your address...">
+            <span
+              @click="getCoordinatesAndRedirect"
+              class="absolute inset-y-0 right-0 flex items-center pr-3 text-2xl text-gray-600 hover:text-black cursor-pointer">
               <Icon name="material-symbols:send-rounded" />
             </span>
-          </NuxtLink>
         </div>
       </div>
     </div>
@@ -24,4 +27,22 @@
 definePageMeta({
   layout: 'home'
 })
+
+const searchInput = ref(null);
+
+const getCoordinatesAndRedirect = async () => {
+  console.log(searchInput.value)
+  console.log(searchInput.value.value)
+  const { data } = await useFetch(`https://nominatim.openstreetmap.org/search?format=json&q=${searchInput.value.value}&limit=1`);
+  console.log(data.value[0]);
+  if (data.value[0]) {
+    const { lat, lon } = data.value[0];
+    console.log(lat, lon);
+    navigateTo(`/catalog?lat=${lat}&lon=${lon}`);
+  } else {
+    searchInput.value.setCustomValidity('Please enter a valid address');
+    searchInput.value.reportValidity();
+    console.log('Please enter a valid address');
+  }
+};
 </script>
