@@ -1,4 +1,16 @@
 <template>
+    <header class="lg:px-16 px-4 py-6">
+        <nav class="flex justify-between relative">
+            <NuxtLink to="/">
+                <span class="text-red-700 hover:text-red-500 cursor-pointer text-4xl font-bold"
+                    style="font-family: calibri;">LocalFood</span>
+            </NuxtLink>
+            <div class="flex items-center gap-2 cursor-pointer">
+                <span class="font-semibold">Checkout</span>
+                <Icon name="material-symbols:shopping-cart-checkout-rounded" class="text-2xl" />
+            </div>
+        </nav>
+    </header>
     <main>
         <section class="grid grid-cols-12">
             <div class="col-span-full bg-red-500 h-fit px-16 py-12 flex flex-col">
@@ -229,9 +241,5 @@ const validateForm = () => {
         formErrorText.value = '*Please meet all field requirements';
     }
 };
-
-definePageMeta({
-    layout: 'cart'
-})
 
 </script>

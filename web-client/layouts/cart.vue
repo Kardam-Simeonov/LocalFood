@@ -5,7 +5,7 @@
                 <span class="text-red-700 hover:text-red-500 cursor-pointer text-4xl font-bold"
                     style="font-family: calibri;">LocalFood</span>
             </NuxtLink>
-            <div class="flex items-center gap-2 p-4 cursor-pointer" @click="isCartOpen = !isCartOpen">
+            <div class="flex items-center gap-2 cursor-pointer" @click="isCartOpen = !isCartOpen">
                 <span class="font-semibold">Your cart</span>
                 <Icon name="material-symbols:shopping-cart" class="text-2xl" />
             </div>
