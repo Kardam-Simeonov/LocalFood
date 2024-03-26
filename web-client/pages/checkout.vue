@@ -144,10 +144,14 @@
 </template>
 
 <script setup>
+import { storeToRefs } from 'pinia'; 
+import { useUserStore } from '~/store/user';
 import { useCartStore } from '~/store/cart';
+import { onMounted } from 'vue';
 
 const { items } = storeToRefs(useCartStore()); 
 const { clearCart } = useCartStore(); 
+const { personalData } = storeToRefs(useUserStore()); 
 
 const totalPrice = computed(() => {
     return items.value.reduce((total, item) => total + item.price, 0);
@@ -167,6 +171,12 @@ const contactDetails = ref({
     fullName: { text: '', errorText: '' },
     email: { text: '', errorText: '' },
     phoneNumber: { text: '', errorText: '' }
+});
+
+onMounted(() => {
+    deliveryAddress.value.street.text = personalData.value.road ? personalData.value.road : '';
+    deliveryAddress.value.number.text = personalData.value.house_number ? personalData.value.house_number : '';
+    deliveryAddress.value.city.text = personalData.value.city ? personalData.value.city : '';
 });
 
 const formErrorText = ref('');

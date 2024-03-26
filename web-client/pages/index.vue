@@ -40,13 +40,16 @@ const getCoordinatesAndRedirect = async () => {
   const { data } = await useFetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}&addressdetails=1&limit=1`);
   console.log(data.value[0]);
   if (data.value[0]) {
-    const { lat, lon, house_number, road, city } = data.value[0];
+    const { lat, lon, address } = data.value[0];
 
+    personalData.value = {};
     personalData.value.lat = lat;
     personalData.value.lon = lon;
-    personalData.value.house_number = house_number;
-    personalData.value.road = road;
-    personalData.value.city = city;
+    personalData.value.house_number = address.house_number;
+    personalData.value.road = address.road;
+    personalData.value.city = address.city;
+
+    console.log(personalData.value);
 
     navigateTo(`/catalog`);
   } else {
