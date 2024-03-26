@@ -16,7 +16,7 @@
             <div class="col-span-full bg-red-500 h-fit px-16 py-12 flex flex-col">
                 <h1 class="text-4xl font-bold mb-12 text-white">Checkout</h1>
                 <div class="grid grid-cols-12">
-                    <div class="col-span-8">
+                    <div class="lg:col-span-8 col-span-full">
                         <div class="grid grid-cols-12 bg-white rounded-xl shadow-lg max-w-4xl text-gray-700 p-8 h-fit">
                             <h1 class="text-2xl font-bold mb-4 col-span-full">Delivery Address</h1>
                             <div class="col-span-full grid grid-cols-2 gap-4 mb-4">
@@ -122,7 +122,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-span-4 h-fit bg-white rounded-xl shadow-lg max-w-4xl text-gray-700 p-8">
+                    <div class="lg:block hidden col-span-4 h-fit bg-white rounded-xl shadow-lg max-w-4xl text-gray-700 p-8">
                         <h1 class="text-2xl font-bold mb-8">Your Cart</h1>
                         <div class="flex flex-col gap-2 mb-10 max-h-[50vh] overflow-y-auto">
                             <div v-for="(item, index) in items" :key="index" class="grid grid-cols-12 gap-5 bg-white h-24 rounded-xl max-w-sm text-gray-700">

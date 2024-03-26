@@ -24,6 +24,11 @@
 </template>
 
 <script setup>
+import { storeToRefs } from 'pinia'; 
+import { useUserStore } from '~/store/user'; 
+
+const { personalData } = storeToRefs(useUserStore()); 
+
 definePageMeta({
   layout: 'home'
 })
@@ -31,18 +36,22 @@ definePageMeta({
 const searchInput = ref(null);
 
 const getCoordinatesAndRedirect = async () => {
-  console.log(searchInput.value)
-  console.log(searchInput.value.value)
-  const { data } = await useFetch(`https://nominatim.openstreetmap.org/search?format=json&q=${searchInput.value.value}&limit=1`);
+  const encodedAddress = encodeURIComponent(searchInput.value.value);
+  const { data } = await useFetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}&addressdetails=1&limit=1`);
   console.log(data.value[0]);
   if (data.value[0]) {
-    const { lat, lon } = data.value[0];
-    console.log(lat, lon);
-    navigateTo(`/catalog?lat=${lat}&lon=${lon}`);
+    const { lat, lon, house_number, road, city } = data.value[0];
+
+    personalData.value.lat = lat;
+    personalData.value.lon = lon;
+    personalData.value.house_number = house_number;
+    personalData.value.road = road;
+    personalData.value.city = city;
+
+    navigateTo(`/catalog`);
   } else {
     searchInput.value.setCustomValidity('Please enter a valid address');
     searchInput.value.reportValidity();
-    console.log('Please enter a valid address');
   }
 };
 </script>
