@@ -35,6 +35,12 @@ definePageMeta({
 
 const searchInput = ref(null);
 
+onMounted(() => {
+  getUserAddress().then(address => {
+    searchInput.value.value = address;
+  });
+});
+
 const getCoordinatesAndRedirect = async () => {
   const encodedAddress = encodeURIComponent(searchInput.value.value);
   const { data } = await useFetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}&addressdetails=1&limit=1`);
@@ -57,4 +63,34 @@ const getCoordinatesAndRedirect = async () => {
     searchInput.value.reportValidity();
   }
 };
+
+const getUserAddress = async () => {
+    let userLocation = {};
+
+    try {
+      userLocation = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject);
+      });
+    }
+    catch (error) {
+      console.log(error);
+      return '';
+    }
+
+    const address = await getAddressFromLatLon(userLocation.coords.latitude, userLocation.coords.longitude);
+
+    console.log(address);
+
+    async function getAddressFromLatLon(lat, lon) {
+      const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`);
+      const data = await response.json();
+      if (data.address) {
+        return `${data.address.road} ${data.address.house_number}, ${data.address.postcode} ${data.address.city}`;
+      } else {
+        throw new Error('Unable to get address from latitude and longitude');
+      }
+    }
+
+    return address;
+  }
 </script>
