@@ -1,0 +1,23 @@
+# Build directories
+bin/
+obj/
+
+# Dependency directories
+packages/
+*.user
+
+# User-specific files
+*.suo
+*.user
+*.sln.docstates
+*.userprefs
+*.vscode
+
+# NuGet packages
+*.nupkg
+*.paket
+packages/
+
+# Visual Studio files
+*.vs/
+.vscode/
