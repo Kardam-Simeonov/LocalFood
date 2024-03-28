@@ -1,9 +1,10 @@
 ﻿using server.Data;
+using server.Interfaces;
 using server.Models;
 
 namespace server.Repository
 {
-    public class ProductRepository
+    public class ProductRepository : IProductRepository
     {
         private readonly DataContext _context;
 

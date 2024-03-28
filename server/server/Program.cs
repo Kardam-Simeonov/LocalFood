@@ -1,6 +1,8 @@
 
 using Microsoft.EntityFrameworkCore;
 using server.Data;
+using server.Interfaces;
+using server.Repository;
 
 namespace server
 {
@@ -14,6 +16,7 @@ namespace server
 
             builder.Services.AddControllers();
             builder.Services.AddTransient<Seed>();
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
