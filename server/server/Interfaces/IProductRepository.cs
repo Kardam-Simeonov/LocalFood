@@ -1,9 +1,9 @@
-﻿using server.Models;
+﻿using server.Dto;
 
 namespace server.Interfaces
 {
     public interface IProductRepository
     {
-        ICollection<Product> GetProducts(); 
+        ICollection<ProductCatalogDto> GetProducts(); 
     }
 }

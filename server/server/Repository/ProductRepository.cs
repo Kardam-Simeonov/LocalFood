@@ -1,4 +1,6 @@
-﻿using server.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using server.Data;
+using server.Dto;
 using server.Interfaces;
 using server.Models;
 
@@ -13,9 +15,21 @@ namespace server.Repository
             _context = context;
         }
 
-        public ICollection<Product> GetProducts()
+        public ICollection<ProductCatalogDto> GetProducts()
         {
-            return _context.Products.OrderBy(p => p.Id).ToList();
+            var products = _context.Products
+                .Include(p => p.Seller)
+                .ToList();
+
+            return products.Select(p => new ProductCatalogDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Price = p.Price,
+                Distance = p.Distance,
+                SellerId = p.SellerId,
+                SellerName = p.Seller.Name
+            }).ToList();
         }
     }
 }

@@ -6,10 +6,10 @@ namespace server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class ProductsController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
-        public ProductController(IProductRepository productRepostory)
+        public ProductsController(IProductRepository productRepostory)
         {
            _productRepository = productRepostory;
         }
