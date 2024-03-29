@@ -12,20 +12,30 @@ export const useAuthStore = defineStore('auth', {
   }),
   actions: {
     async authenticateUser({ username, password }: UserPayloadInterface) {
-      const { data, pending }: any = await useFetch('https://dummyjson.com/auth/login', {
-        method: 'post',
-        headers: { 'Content-Type': 'application/json' },
-        body: {
-          username,
-          password,
-        },
-      });
-      this.loading = pending;
+      // Set loading to true
+      this.loading = true;
 
-      if (data.value) {
-        const token = useCookie('token'); 
-        token.value = data?.value?.token; 
-        this.authenticated = true; 
+      try {
+        const data : any = await $fetch('https://dummyjson.com/auth/login', {
+          method: 'post',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password }), // Ensure body is stringified
+        });
+
+        if (data) {
+          const token = useCookie('token'); 
+          token.value = data?.token; 
+          this.authenticated = true;
+        } else {
+          // Handle error response
+          console.error('Authentication failed');
+        }
+      } catch (error) {
+        // Handle fetch error
+        console.error('Error during authentication:', error);
+      } finally {
+        // Set loading to false
+        this.loading = false;
       }
     },
     logUserOut() {

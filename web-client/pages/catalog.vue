@@ -52,6 +52,10 @@ const catalogItems = ref([
   },
 ]);
 
+onMounted(() => {
+  // Fetch catalog items from the server at https://localhost:7230/api/products
+});
+
 definePageMeta({
   layout: 'cart'
 })

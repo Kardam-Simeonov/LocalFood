@@ -43,10 +43,10 @@ onMounted(() => {
 
 const getCoordinatesAndRedirect = async () => {
   const encodedAddress = encodeURIComponent(searchInput.value.value);
-  const { data } = await useFetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}&addressdetails=1&limit=1`);
-  console.log(data.value[0]);
-  if (data.value[0]) {
-    const { lat, lon, address } = data.value[0];
+  const data = await $fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}&addressdetails=1&limit=1`);
+  console.log(data);
+  if (data[0]) {
+    const { lat, lon, address } = data[0];
 
     personalData.value = {};
     personalData.value.lat = lat;
