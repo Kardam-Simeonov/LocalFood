@@ -9,13 +9,13 @@
                 <div class="flex flex-col gap-4">
                     <div v-for="(item, index) in catalogItems" :key="index" @click="addToCart(catalogItems[index])" class="grid grid-cols-12 bg-white h-40 rounded-xl shadow-lg max-w-4xl text-gray-700 hover:bg-gray-100 cursor-pointer">
                         <img class="col-span-4 object-cover object-center h-40 w-full rounded-l-xl"
-                            :src="item.image">
+                            src="/assets/cheese.jpg">
                         <div class="col-span-8 flex flex-col pt-4 pb-2 px-4">
                             <h1 class="text-xl font-semibold mb-2">{{ item.name }}</h1>
                             <span class="flex gap-2">
                                 <img class="w-8 aspect-square rounded-full object-cover object-center"
-                                    :src="item.seller.image">
-                                <p class="font-semibold">{{ item.seller.name }}</p>
+                                    src="/assets/profile.jpg">
+                                <p class="font-semibold">{{ item.sellerName }}</p>
                             </span>
                             <span class="flex justify-between mt-auto">
                                 <p class="text-xl font-bold">${{ item.price.toFixed(2) }}</p>
@@ -40,21 +40,23 @@ const { addToCart } = useCartStore();
 const { items } = storeToRefs(useCartStore()); 
 
 const catalogItems = ref([
-  {
-    name: 'Homemade Feta Cheese',
-    price: 5.00,
-    distance: 1.5,
-    image: '/assets/cheese.jpg',
-    seller: {
-      name: 'Ivan',
-      image: '/assets/profile.jpg'
-    }
-  },
+//   {
+//     name: 'Homemade Feta Cheese',
+//     price: 5.00,
+//     distance: 1.5,
+//     image: '/assets/cheese.jpg',
+//     seller: {
+//       name: 'Ivan',
+//       image: '/assets/profile.jpg'
+//     }
+//   },
 ]);
 
-onMounted(() => {
-  // Fetch catalog items from the server at https://localhost:7230/api/products
-});
+// Fetch catalog items from the server at https://localhost:7230/api/products
+const { data } = await useFetch(`https://localhost:7230/api/products`);
+catalogItems.value = data.value;
+// console.log(data.value);
+// console.log(catalogItems.value);
 
 definePageMeta({
   layout: 'cart'

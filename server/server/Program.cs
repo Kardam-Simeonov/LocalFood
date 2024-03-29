@@ -24,6 +24,16 @@ namespace server
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultCOnnection"));
             });
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    policy =>
+                    {
+                        policy.AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
+                    });
+            });
 
             var app = builder.Build();
 
@@ -48,6 +58,8 @@ namespace server
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseCors();
 
             app.UseHttpsRedirection();
 
