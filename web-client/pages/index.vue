@@ -82,8 +82,7 @@ const getUserAddress = async () => {
     console.log(address);
 
     async function getAddressFromLatLon(lat, lon) {
-      const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`);
-      const data = await response.json();
+      const data = await $fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`);
       if (data.address) {
         return `${data.address.road} ${data.address.house_number}, ${data.address.postcode} ${data.address.city}`;
       } else {
