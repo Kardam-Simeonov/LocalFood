@@ -126,7 +126,7 @@
                         <h1 class="text-2xl font-bold mb-8">Your Cart</h1>
                         <div class="flex flex-col gap-2 mb-10 max-h-[50vh] overflow-y-auto">
                             <div v-for="(item, index) in items" :key="index" class="grid grid-cols-12 gap-5 bg-white h-24 rounded-xl max-w-sm text-gray-700">
-                                <img class="col-span-3 object-cover object-center w-full h-18 rounded-xl" :src="item.image">
+                                <img class="col-span-3 object-cover object-center w-full h-18 rounded-xl" src="/assets/cheese.jpg">
                                 <div class="col-span-9 flex flex-col pt-4 pb-2 px-4">
                                     <h1 class="text-lg font-semibold mb-2">{{ item.name }}</h1>
                                     <span class="flex justify-end mt-auto">
