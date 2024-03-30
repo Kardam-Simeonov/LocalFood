@@ -14,12 +14,13 @@
           </div>
           <div class="mb-4">
             <label class="block text-gray-700 font-bold mb-2" for="username">
-              Username
+              Full Name
             </label>
             <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                    id="username"
                    type="text"
-                   placeholder="Username">
+                   placeholder="Full Name"
+                   v-model="user.name">
           </div>
           <div class="mb-4">
             <label class="block text-gray-700 font-bold mb-2" for="email">
@@ -28,7 +29,8 @@
             <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                    id="email"
                    type="email"
-                   placeholder="Email">
+                   placeholder="Email"
+                   v-model="user.email">
           </div>
           <div class="mb-4">
             <label class="block text-gray-700 font-bold mb-2" for="password">
@@ -37,16 +39,51 @@
             <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                    id="password"
                    type="password"
-                   placeholder="Password">
+                   placeholder="Password"
+                   v-model="user.password">
           </div>
-          <p class="text-red-500 text-sm mb-4">error field</p>
+          <p class="text-red-500 text-sm mb-4">{{ errorText }}</p>
           <div class="flex items-center justify-between">
-            <NuxtLink to="/login">
-                <button class="bg-red-800 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Register
-                </button>
-            </NuxtLink>
+            <button @click="register()" class="bg-red-800 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+              Register
+            </button>
           </div>
         </div>
       </div>
 </template>
+
+<script setup>
+const user = ref({
+  name: '',
+  email: '', 
+  password: '',
+});
+const errorText = ref('');
+const router = useRouter();
+
+const register = async () => {
+  
+  console.log(JSON.stringify({ email, password }))
+  try {
+    const data = await $fetch('https://localhost:7230/api/auth/register', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: user.value.name, email: user.value.email, password: user.value.password }), // Ensure body is stringified
+    });
+
+    if (data) {
+      if (data == 'User already exists.') {
+        errorText.value = 'User already exists.';
+      } else {
+        router.push('/dashboard');
+      }
+    } else {
+      // Handle error response
+      errorText.value = 'User already exists.';
+    }
+  } catch (error) {
+    // Handle fetch error
+    errorText.value = 'User already exists.';
+  }
+};
+</script>
