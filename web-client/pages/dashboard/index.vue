@@ -51,9 +51,11 @@
                     <p class="text-lg font-semibold mt-14 mb-4">$2.50</p>
                     <button class="absolute bottom-4 right-4 bg-red-700 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">Delete</button>
                 </div>
-                <div class="border-dashed border-4 border-red-500 hover:border-red-300 text-red-500 hover:text-red-300 cursor-pointer rounded-lg p-4 flex flex-col justify-center items-center min-h-[23rem]">
-                    <Icon name="bi:plus-circle" class="text-6xl" />
-                </div>
+                <NuxtLink to="/dashboard/add">
+                    <div class="h-full border-dashed border-4 border-red-500 hover:border-red-300 text-red-500 hover:text-red-300 cursor-pointer rounded-lg p-4 flex flex-col justify-center items-center min-h-[23rem]">
+                        <Icon name="bi:plus-circle" class="text-6xl" />
+                    </div>
+                </NuxtLink>
             </div>
         </section>
     </main>
