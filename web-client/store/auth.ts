@@ -16,15 +16,16 @@ export const useAuthStore = defineStore('auth', {
       this.loading = true;
 
       try {
-        const data : any = await $fetch('https://dummyjson.com/auth/login', {
+        const data : any = await $fetch('https://localhost:7230/api/auth/login', {
           method: 'post',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, password }), // Ensure body is stringified
         });
 
         if (data) {
+          console.log(data)
           const token = useCookie('token'); 
-          token.value = data?.token; 
+          token.value = data; 
           this.authenticated = true;
         } else {
           // Handle error response
