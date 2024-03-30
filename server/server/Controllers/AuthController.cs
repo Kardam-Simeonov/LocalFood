@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using server.Data;
 using server.Dto;
 using server.Models;
 using System.IdentityModel.Tokens.Jwt;
@@ -12,40 +14,61 @@ namespace server.Controllers
     [ApiController]
     public class AuthController : Controller
     {
-        public static Seller seller = new Seller();
+        //public static Seller seller = new Seller();
         private readonly IConfiguration _configuration;
+        private readonly DataContext _context;
 
-        public AuthController(IConfiguration configuration)
+        public AuthController(DataContext context, IConfiguration configuration)
         {
             this._configuration = configuration;
+            this._context = context;
         }
 
         [HttpPost("register")]
         public async Task<ActionResult<Seller>> Register(UserDto request)
         {
+            // Check if the user already exists
+            if (await _context.Sellers.AnyAsync(u => u.Name == request.Username))
+            {
+                return Conflict("User already exists.");
+            }
+
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
-            seller.Name = request.Username;
-            seller.PasswordHash = passwordHash;
-            seller.PasswordSalt = passwordSalt;
+            // Create a new user entity
+            var newUser = new Seller
+            {
+                Name = request.Username,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt
+            };
 
-            return Ok(seller);
+            // Add the user to the database
+            _context.Sellers.Add(newUser);
+            await _context.SaveChangesAsync();
+
+            return Ok(newUser);
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login(UserDto request)
         {
-            if (seller.Name != request.Username)
+            // Find the user in the database
+            var user = await _context.Sellers.SingleOrDefaultAsync(u => u.Name == request.Username);
+
+            if (user == null)
             {
                 return BadRequest("User not found.");
             }
 
-            if (!VerifyPasswordHash(request.Password, seller.PasswordHash, seller.PasswordSalt))
+            // Verify password
+            if (!VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
             {
                 return BadRequest("Wrong password.");
             }
 
-            string token = CreateToken(seller);
+            // Create and return JWT token
+            string token = CreateToken(user);
             return Ok(token);
         }
         
