@@ -25,10 +25,10 @@ namespace server.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<Seller>> Register(UserDto request)
+        public async Task<ActionResult<Seller>> Register(UserRegisterDto request)
         {
             // Check if the user already exists
-            if (await _context.Sellers.AnyAsync(u => u.Name == request.Username))
+            if (await _context.Sellers.AnyAsync(u => u.Email == request.Email))
             {
                 return Conflict("User already exists.");
             }
@@ -38,7 +38,7 @@ namespace server.Controllers
             // Create a new user entity
             var newUser = new Seller
             {
-                Name = request.Username,
+                Name = request.Name,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt
             };
@@ -51,7 +51,7 @@ namespace server.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(UserDto request)
+        public async Task<ActionResult<string>> Login(UserLoginDto request)
         {
             // Find the user in the database
             var user = await _context.Sellers.SingleOrDefaultAsync(u => u.Name == request.Username);
