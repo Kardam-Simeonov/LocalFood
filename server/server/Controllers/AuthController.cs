@@ -39,6 +39,7 @@ namespace server.Controllers
             var newUser = new Seller
             {
                 Name = request.Name,
+                Email = request.Email,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt
             };
@@ -54,7 +55,7 @@ namespace server.Controllers
         public async Task<ActionResult<string>> Login(UserLoginDto request)
         {
             // Find the user in the database
-            var user = await _context.Sellers.SingleOrDefaultAsync(u => u.Name == request.Username);
+            var user = await _context.Sellers.SingleOrDefaultAsync(u => u.Email == request.Email);
 
             if (user == null)
             {
