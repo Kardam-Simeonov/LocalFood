@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 
 interface UserPayloadInterface {
-  username: string;
+  email: string;
   password: string;
 }
 
@@ -11,15 +11,16 @@ export const useAuthStore = defineStore('auth', {
     loading: false,
   }),
   actions: {
-    async authenticateUser({ username, password }: UserPayloadInterface) {
+    async authenticateUser({ email, password }: UserPayloadInterface) {
       // Set loading to true
       this.loading = true;
 
+      console.log(JSON.stringify({ email, password }))
       try {
         const data : any = await $fetch('https://localhost:7230/api/auth/login', {
           method: 'post',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, password }), // Ensure body is stringified
+          body: JSON.stringify({ email, password }), // Ensure body is stringified
         });
 
         if (data) {

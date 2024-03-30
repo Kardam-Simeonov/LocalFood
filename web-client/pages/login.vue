@@ -10,7 +10,7 @@
                 id="email"
                 type="email"
                 placeholder="Email"
-                v-model="user.username">
+                v-model="user.email">
         </div>
         <div class="mb-6">
             <label class="block text-gray-700 font-bold mb-2" for="password">
@@ -43,8 +43,8 @@ const { authenticateUser } = useAuthStore(); // use authenticateUser action from
 const { authenticated } = storeToRefs(useAuthStore()); // make authenticated state reactive with storeToRefs
 
 const user = ref({
-  username: 'kminchelle', 
-  password: '0lelplR',
+  email: '', 
+  password: '',
 });
 const errorText = ref('');
 const router = useRouter();
