@@ -8,6 +8,7 @@ interface UserPayloadInterface {
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     authenticated: false,
+    userEmail: null,
     loading: false,
   }),
   actions: {

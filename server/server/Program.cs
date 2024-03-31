@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using server.Data;
 using server.Interfaces;
 using server.Repository;
+using System.Text.Json.Serialization;
 
 namespace server
 {
@@ -34,6 +35,9 @@ namespace server
                             .AllowAnyHeader();
                     });
             });
+            builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve
+            );
 
             var app = builder.Build();
 

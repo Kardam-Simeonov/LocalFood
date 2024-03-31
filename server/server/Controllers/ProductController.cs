@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using server.Dto;
 using server.Interfaces;
 using server.Models;
+using System.Web.Http.Controllers;
 
 namespace server.Controllers
 {
@@ -25,5 +28,30 @@ namespace server.Controllers
 
             return Ok(products);
         }
+
+        [HttpPost("add")]
+        public async Task<IActionResult> Add(ProductAddDto productDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var seller = await _productRepository.GetSellerByEmail(productDto.SellerEmail);
+
+            if (seller == null)
+                return NotFound("Seller not found");
+
+            var product = new Product
+            {
+                Name = productDto.Name,
+                Price = productDto.Price,
+                SellerId = seller.Id,
+                Seller = seller
+            };
+
+            await _productRepository.AddProduct(product);
+
+            return Ok(product);
+        }
+
     }
 }

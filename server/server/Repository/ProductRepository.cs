@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure.Core;
+using Microsoft.EntityFrameworkCore;
 using server.Data;
 using server.Dto;
 using server.Interfaces;
@@ -30,6 +31,16 @@ namespace server.Repository
                 SellerId = p.SellerId,
                 SellerName = p.Seller.Name
             }).ToList();
+        }
+        public async Task AddProduct(Product product)
+        {
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<Seller> GetSellerByEmail(string email)
+        {
+            return await _context.Sellers.FirstOrDefaultAsync(s => s.Email == email);
         }
     }
 }
