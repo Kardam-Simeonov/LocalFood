@@ -8,7 +8,6 @@ interface UserPayloadInterface {
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     authenticated: false,
-    userEmail: null,
     loading: false,
   }),
   actions: {
@@ -25,9 +24,10 @@ export const useAuthStore = defineStore('auth', {
         });
 
         if (data) {
-          console.log(data)
-          const token = useCookie('token'); 
+          const token = useCookie('token');
+          const emailCookie = useCookie('email'); 
           token.value = data; 
+          emailCookie.value = email;
           this.authenticated = true;
         } else {
           // Handle error response
