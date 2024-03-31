@@ -70,7 +70,7 @@ namespace server.Controllers
 
             // Create and return JWT token
             string token = CreateToken(user);
-            return Ok(token);
+            return Ok(new { token = token, userId = user.Id });
         }
         
         private string CreateToken(Seller user) 

@@ -33,14 +33,14 @@ namespace server.Repository
             }).ToList();
         }
         public async Task AddProduct(Product product)
-        {
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
-        }
+{
+    _context.Products.Add(product);
+    await _context.SaveChangesAsync();
+}
 
-        public async Task<Seller> GetSellerByEmail(string email)
+        public async Task<Seller> GetSellerById(int sellerId)
         {
-            return await _context.Sellers.FirstOrDefaultAsync(s => s.Email == email);
+            return await _context.Sellers.FirstOrDefaultAsync(s => s.Id == sellerId);
         }
     }
 }

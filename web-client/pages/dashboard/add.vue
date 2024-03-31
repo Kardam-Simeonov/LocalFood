@@ -27,23 +27,23 @@
 const product = ref({
   name: '',
   price: '', 
-  sellerEmail: '',
+  sellerId: '',
 });
 const errorText = ref('');
 const router = useRouter();
-const email = useCookie('email');
+const userId = useCookie('userId');
 
 const addProduct = async () => {
   try {
-    console.log(email.value)
+    console.log(userId.value)
     const data = await $fetch('https://localhost:7230/api/products/add', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: product.value.name, price: product.value.price, sellerEmail: email.value }), // Ensure body is stringified
+        body: JSON.stringify({ name: product.value.name, price: product.value.price, sellerId: userId.value }),
     });
 
     if (data) {
-        // Handle success response
+        // Handle success response 
         router.push('/dashboard');
     } else {
       // Handle error response

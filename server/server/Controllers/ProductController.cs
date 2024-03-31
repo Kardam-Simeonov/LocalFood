@@ -35,7 +35,7 @@ namespace server.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var seller = await _productRepository.GetSellerByEmail(productDto.SellerEmail);
+            var seller = await _productRepository.GetSellerById(productDto.SellerId);
 
             if (seller == null)
                 return NotFound("Seller not found");

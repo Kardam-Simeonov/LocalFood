@@ -7,6 +7,6 @@ namespace server.Interfaces
     {
         ICollection<ProductCatalogDto> GetProducts();
         Task AddProduct(Product product);
-        Task<Seller> GetSellerByEmail(string email);
+        Task<Seller> GetSellerById(int sellerId);
     }
 }

@@ -24,10 +24,11 @@ export const useAuthStore = defineStore('auth', {
         });
 
         if (data) {
+          
           const token = useCookie('token');
-          const emailCookie = useCookie('email'); 
-          token.value = data; 
-          emailCookie.value = email;
+          const userId = useCookie('userId'); 
+          token.value = data.token; 
+          userId.value = data.userId;
           this.authenticated = true;
         } else {
           // Handle error response
@@ -43,8 +44,10 @@ export const useAuthStore = defineStore('auth', {
     },
     logUserOut() {
       const token = useCookie('token'); 
+      const userId = useCookie('userId');
       this.authenticated = false; 
       token.value = null; 
+      userId.value = null;
     },
   },
 });
