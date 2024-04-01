@@ -32,12 +32,20 @@ namespace server.Repository
                 SellerName = p.Seller.Name
             }).ToList();
         }
+        public async Task<Product> GetProductById(int id)
+        {
+            return await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+        }
         public async Task AddProduct(Product product)
-{
-    _context.Products.Add(product);
-    await _context.SaveChangesAsync();
-}
-
+        {
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
+        }
+        public async Task RemoveProduct(Product product)
+        {
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+        }
         public async Task<Seller> GetSellerById(int sellerId)
         {
             return await _context.Sellers.FirstOrDefaultAsync(s => s.Id == sellerId);

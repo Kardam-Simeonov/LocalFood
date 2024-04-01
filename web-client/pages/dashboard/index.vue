@@ -49,7 +49,7 @@
                     <img src="/assets/cheese.jpg" alt="Product Image" class="w-full h-56 object-cover rounded-lg mb-6">
                     <h2 class="text-xl font-bold">{{ product.name }}</h2>
                     <p class="text-lg font-semibold mt-14 mb-4">${{ product.price.toFixed(2) }}</p>
-                    <button class="absolute bottom-4 right-4 bg-red-700 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">Delete</button>
+                    <button @click="deleteProduct(product.id)" class="absolute bottom-4 right-4 bg-red-700 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">Delete</button>
                 </div>
                 <NuxtLink to="/dashboard/add">
                     <div class="h-full border-dashed border-4 border-red-500 hover:border-red-300 text-red-500 hover:text-red-300 cursor-pointer rounded-lg p-4 flex flex-col justify-center items-center min-h-[23rem]">
@@ -77,9 +77,23 @@ definePageMeta({
 
 const { data } = await useFetch(`https://localhost:7230/api/products`);
 
-const userProducts = computed(() => {
-  return data.value["$values"].filter(product => product.sellerId === userId.value);
-});
+const userProducts = ref([]);
+
+userProducts.value = data.value["$values"].filter(product => product.sellerId === userId.value)
+
+console.log(userProducts.value);
+
+const deleteProduct = async (id) => {
+try{
+  await $fetch(`https://localhost:7230/api/products/${id}`, {
+    method: 'DELETE',
+  });
+  // Remove the deleted product from the userProducts array
+  userProducts.value = userProducts.value.filter(product => product.id !== id);
+} catch (error){
+    console.log(error);
+}
+};
 
 console.log(userProducts.value)
 

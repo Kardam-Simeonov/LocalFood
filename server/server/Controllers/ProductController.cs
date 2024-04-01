@@ -53,5 +53,18 @@ namespace server.Controllers
             return Ok(product);
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Remove(int id)
+        {
+            var product = await _productRepository.GetProductById(id);
+
+            if (product == null)
+                return NotFound("Product not found");
+
+            await _productRepository.RemoveProduct(product);
+
+            return Ok();
+        }
+
     }
 }
