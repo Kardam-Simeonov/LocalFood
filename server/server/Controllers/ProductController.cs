@@ -44,8 +44,8 @@ namespace server.Controllers
             {
                 Name = productDto.Name,
                 Price = productDto.Price,
-                SellerId = seller.Id,
-                Seller = seller
+                VendorId = seller.Id,
+                Vendor = seller
             };
 
             await _productRepository.AddProduct(product);

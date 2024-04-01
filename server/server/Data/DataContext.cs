@@ -11,13 +11,14 @@ namespace server.Data
         }
 
         public DbSet<Product> Products { get; set; }
-        public DbSet<Seller> Sellers { get; set; }
+        public DbSet<Vendor> Vendors { get; set; }
+        public DbSet<Order> Orders { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>()
-                .HasOne(p => p.Seller)
+                .HasOne(p => p.Vendor)
                 .WithMany(s => s.Products)
-                .HasForeignKey(p => p.SellerId);
+                .HasForeignKey(p => p.VendorId);
         }
     }
 }

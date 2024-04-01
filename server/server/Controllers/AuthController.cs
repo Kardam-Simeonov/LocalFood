@@ -25,10 +25,10 @@ namespace server.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<Seller>> Register(UserRegisterDto request)
+        public async Task<ActionResult<Vendor>> Register(UserRegisterDto request)
         {
             // Check if the user already exists
-            if (await _context.Sellers.AnyAsync(u => u.Email == request.Email))
+            if (await _context.Vendors.AnyAsync(u => u.Email == request.Email))
             {
                 return Conflict("User already exists.");
             }
@@ -36,7 +36,7 @@ namespace server.Controllers
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
             // Create a new user entity
-            var newUser = new Seller
+            var newUser = new Vendor
             {
                 Name = request.Name,
                 Email = request.Email,
@@ -45,7 +45,7 @@ namespace server.Controllers
             };
 
             // Add the user to the database
-            _context.Sellers.Add(newUser);
+            _context.Vendors.Add(newUser);
             await _context.SaveChangesAsync();
 
             return Ok(newUser);
@@ -55,7 +55,7 @@ namespace server.Controllers
         public async Task<ActionResult<string>> Login(UserLoginDto request)
         {
             // Find the user in the database
-            var user = await _context.Sellers.SingleOrDefaultAsync(u => u.Email == request.Email);
+            var user = await _context.Vendors.SingleOrDefaultAsync(u => u.Email == request.Email);
 
             if (user == null)
             {
@@ -73,7 +73,7 @@ namespace server.Controllers
             return Ok(new { token = token, userId = user.Id });
         }
         
-        private string CreateToken(Seller user) 
+        private string CreateToken(Vendor user) 
         {
             List<Claim> claims = new List<Claim>()
             {

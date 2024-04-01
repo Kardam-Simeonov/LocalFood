@@ -19,7 +19,7 @@ namespace server.Repository
         public ICollection<ProductCatalogDto> GetProducts()
         {
             var products = _context.Products
-                .Include(p => p.Seller)
+                .Include(p => p.Vendor)
                 .ToList();
 
             return products.Select(p => new ProductCatalogDto
@@ -28,8 +28,8 @@ namespace server.Repository
                 Name = p.Name,
                 Price = p.Price,
                 Distance = p.Distance,
-                SellerId = p.SellerId,
-                SellerName = p.Seller.Name
+                SellerId = p.VendorId,
+                SellerName = p.Vendor.Name
             }).ToList();
         }
         public async Task<Product> GetProductById(int id)
@@ -46,9 +46,9 @@ namespace server.Repository
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
         }
-        public async Task<Seller> GetSellerById(int sellerId)
+        public async Task<Vendor> GetSellerById(int sellerId)
         {
-            return await _context.Sellers.FirstOrDefaultAsync(s => s.Id == sellerId);
+            return await _context.Vendors.FirstOrDefaultAsync(s => s.Id == sellerId);
         }
     }
 }

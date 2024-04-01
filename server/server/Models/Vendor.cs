@@ -1,6 +1,6 @@
 ﻿namespace server.Models
 {
-    public class Seller
+    public class Vendor
     {
         public int Id { get; set; }
         public string Name { get; set; }
