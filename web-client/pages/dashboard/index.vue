@@ -5,38 +5,19 @@
             <aside
                 class="xl:col-span-4 col-span-full bg-red-500 xl:h-full h-[70vh] overflow-y-auto px-8 py-12 flex flex-col">
                 <h1 class="text-4xl text-white font-semibold mb-12">Your orders</h1>
-                <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
-                    <div class="font-bold text-xl mb-4">Order #1</div>
-                        <div class="flex items-center mb-4">
+                <div v-for="(order, index) in userOrders" :key="index" class="bg-white shadow-lg rounded-lg p-6 mb-6">
+                    <div class="font-bold text-xl mb-4">Order #{{ order.id }}</div>
+                        <div v-for="(orderProduct, index) in order.orderProducts" :key="index" class="flex items-center mb-4">
                             <img src="/assets/cheese.jpg" alt="${product.ImageName}" class="w-16 h-16 object-cover rounded-lg mr-4">
                             <div>
-                                <div class="font-bold">Product Title</div>
-                                <div class="text-gray-600">$3.50</div>
+                                <div class="font-bold">{{ orderProduct.product.name }}</div>
+                                <div class="text-gray-600">${{ orderProduct.product.price.toFixed(2) }}</div>
                             </div>
                         </div>
-                    <p class="font-semibold">Deliver to: Loading...</p>
+                    <p class="font-semibold">Deliver to: {{ order.address }}</p>
                     <button class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 mt-4">Mark as ready for pickup</button>
                 </div>
-                <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
-                    <div class="font-bold text-xl mb-4">Order #2</div>
-                        <div class="flex items-center mb-4">
-                            <img src="/assets/cheese.jpg" alt="${product.ImageName}" class="w-16 h-16 object-cover rounded-lg mr-4">
-                            <div>
-                                <div class="font-bold">Product Title</div>
-                                <div class="text-gray-600">$3.50</div>
-                            </div>
-                        </div>
-                        <div class="flex items-center mb-4">
-                            <img src="/assets/cheese.jpg" alt="${product.ImageName}" class="w-16 h-16 object-cover rounded-lg mr-4">
-                            <div>
-                                <div class="font-bold">Product Title</div>
-                                <div class="text-gray-600">$3.50</div>
-                            </div>
-                        </div>
-                    <p class="font-semibold">Deliver to: Loading...</p>
-                    <button class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 mt-4">Mark as ready for pickup</button>
-                </div>
-                <div
+                <div v-if="userOrders.length === 0"
                     class="border-dashed border-4 border-red-800 rounded-lg p-4 flex flex-col justify-center items-center min-h-[15rem]">
                     <p class="text-white text-center">You have no orders</p>
                 </div>
@@ -75,13 +56,19 @@ definePageMeta({
   middleware: 'auth'
 })
 
-const { data } = await useFetch(`https://localhost:7230/api/products`);
+const { data: productsData } = await useFetch(`https://localhost:7230/api/products`);
 
 const userProducts = ref([]);
 
-userProducts.value = data.value.filter(product => product.vendorId === userId.value)
+userProducts.value = productsData.value.filter(product => product.vendorId === userId.value)
 
-console.log(userProducts.value);
+const { data: ordersData } = await useFetch(`https://localhost:7230/api/orders/vendor/${userId.value}`);
+
+const userOrders = ref([]);
+
+userOrders.value = ordersData.value;
+
+console.log(ordersData.value);
 
 const deleteProduct = async (id) => {
 try{
