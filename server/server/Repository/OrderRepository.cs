@@ -14,6 +14,11 @@ namespace server.Repository
         {
             _context = context;
         }
+        public async Task AddOrder(Order order)
+        {
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+        }
         public async Task<ICollection<Order>> GetOrdersByVendorId(int id)
         {
             return await _context.Orders

@@ -36,10 +36,10 @@ const userId = useCookie('userId');
 const addProduct = async () => {
   try {
     console.log(userId.value)
-    const data = await $fetch('https://localhost:7230/api/products/add', {
+    const data = await $fetch('https://localhost:7230/api/products', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: product.value.name, price: product.value.price, sellerId: userId.value }),
+        body: JSON.stringify({ name: product.value.name, price: product.value.price, vendorId: userId.value }),
     });
 
     if (data) {

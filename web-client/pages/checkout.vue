@@ -122,11 +122,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="lg:block hidden col-span-4 h-fit bg-white rounded-xl shadow-lg max-w-4xl text-gray-700 p-8">
+                    <div
+                        class="lg:block hidden col-span-4 h-fit bg-white rounded-xl shadow-lg max-w-4xl text-gray-700 p-8">
                         <h1 class="text-2xl font-bold mb-8">Your Cart</h1>
                         <div class="flex flex-col gap-2 mb-10 max-h-[50vh] overflow-y-auto">
-                            <div v-for="(item, index) in items" :key="index" class="grid grid-cols-12 gap-5 bg-white h-24 rounded-xl max-w-sm text-gray-700">
-                                <img class="col-span-3 object-cover object-center w-full h-18 rounded-xl" src="/assets/cheese.jpg">
+                            <div v-for="(item, index) in items" :key="index"
+                                class="grid grid-cols-12 gap-5 bg-white h-24 rounded-xl max-w-sm text-gray-700">
+                                <img class="col-span-3 object-cover object-center w-full h-18 rounded-xl"
+                                    src="/assets/cheese.jpg">
                                 <div class="col-span-9 flex flex-col pt-4 pb-2 px-4">
                                     <h1 class="text-lg font-semibold mb-2">{{ item.name }}</h1>
                                     <span class="flex justify-end mt-auto">
@@ -144,14 +147,14 @@
 </template>
 
 <script setup>
-import { storeToRefs } from 'pinia'; 
+import { storeToRefs } from 'pinia';
 import { useUserStore } from '~/store/user';
 import { useCartStore } from '~/store/cart';
 import { onMounted } from 'vue';
 
-const { items } = storeToRefs(useCartStore()); 
-const { clearCart } = useCartStore(); 
-const { personalData } = storeToRefs(useUserStore()); 
+const { items } = storeToRefs(useCartStore());
+const { clearCart } = useCartStore();
+const { personalData } = storeToRefs(useUserStore());
 
 const totalPrice = computed(() => {
     return items.value.reduce((total, item) => total + item.price, 0);
@@ -229,6 +232,31 @@ const validatePhoneNumber = () => {
     }
 }
 
+const computedAddress = computed(() => {
+    return `${deliveryAddress.value.street.text} ${deliveryAddress.value.number.text}, ${deliveryAddress.value.city.text}`;
+});
+
+const addProduct = async () => {
+    try {
+        console.log(JSON.stringify({ products: items.value, address: computedAddress.value }));
+        const data = await $fetch('https://localhost:7230/api/orders', {
+            method: 'post',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ products: items.value, address: computedAddress.value }),
+        });
+
+        if (data) {
+            // Handle success response 
+            router.push('/');
+        } else {
+           console.log('Something went wrong!');
+        }
+    } catch (error) {
+        // Handle fetch error
+        console.log('Something went wrong!');
+    }
+};
+
 const validateForm = () => {
     validateStreet();
     validateNumber();
@@ -241,6 +269,7 @@ const validateForm = () => {
         Object.values(deliveryAddress.value).every(field => field.errorText === '') &&
         Object.values(contactDetails.value).every(field => field.errorText === '')
     ) {
+        addProduct();
         clearCart();
         return navigateTo('/');
     } else {

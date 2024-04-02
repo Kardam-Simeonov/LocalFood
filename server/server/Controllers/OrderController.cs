@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using server.Dto;
 using server.Interfaces;
 using server.Models;
+using server.Repository;
 
 namespace server.Controllers
 {
@@ -13,6 +15,27 @@ namespace server.Controllers
         public OrdersController(IOrderRepository orderRepository)
         {
             _orderRepository = orderRepository;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(OrderAddDto orderDto)
+        {
+            var order = new Order
+            {
+                Address = orderDto.Address,
+                Products = orderDto.Products.Select(productDto => new Product
+                {
+                    Id = productDto.Id,
+                    Name = productDto.Name,
+                    Price = productDto.Price,
+                    Distance = productDto.Distance,
+                    VendorId = productDto.VendorId
+                }).ToList()
+            };
+
+            await _orderRepository.AddOrder(order);
+
+            return Ok(order.Id);
         }
 
         [HttpGet("vendor/{vendorId}")]

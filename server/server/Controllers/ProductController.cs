@@ -29,23 +29,23 @@ namespace server.Controllers
             return Ok(products);
         }
 
-        [HttpPost("add")]
+        [HttpPost]
         public async Task<IActionResult> Add(ProductAddDto productDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var seller = await _productRepository.GetSellerById(productDto.SellerId);
+            var vendor = await _productRepository.GetProductVendorById(productDto.VendorId);
 
-            if (seller == null)
-                return NotFound("Seller not found");
+            if (vendor == null)
+                return NotFound("Vendor not found");
 
             var product = new Product
             {
                 Name = productDto.Name,
                 Price = productDto.Price,
-                VendorId = seller.Id,
-                Vendor = seller
+                VendorId = vendor.Id,
+                Vendor = vendor
             };
 
             await _productRepository.AddProduct(product);

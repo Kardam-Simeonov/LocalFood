@@ -1,4 +1,6 @@
-﻿namespace server.Models
+﻿using server.Dto;
+
+namespace server.Models
 {
     public class Order
     {

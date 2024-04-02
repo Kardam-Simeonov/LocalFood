@@ -15,7 +15,7 @@
                             <span class="flex gap-2">
                                 <img class="w-8 aspect-square rounded-full object-cover object-center"
                                     src="/assets/profile.jpg">
-                                <p class="font-semibold">{{ item.sellerName }}</p>
+                                <p class="font-semibold">{{ item.vendorName }}</p>
                             </span>
                             <span class="flex justify-between mt-auto">
                                 <p class="text-xl font-bold">${{ item.price.toFixed(2) }}</p>
@@ -54,9 +54,9 @@ const catalogItems = ref([
 
 // Fetch catalog items from the server at https://localhost:7230/api/products
 const { data } = await useFetch(`https://localhost:7230/api/products`);
-catalogItems.value = data.value;
-// console.log(data.value);
-// console.log(catalogItems.value);
+catalogItems.value = data.value['$values'];
+console.log(data.value);
+console.log(catalogItems.value);
 
 definePageMeta({
   layout: 'cart'

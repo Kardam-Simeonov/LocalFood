@@ -28,8 +28,8 @@ namespace server.Repository
                 Name = p.Name,
                 Price = p.Price,
                 Distance = p.Distance,
-                SellerId = p.VendorId,
-                SellerName = p.Vendor.Name
+                VendorId = p.VendorId,
+                VendorName = p.Vendor.Name
             }).ToList();
         }
         public async Task<Product> GetProductById(int id)
@@ -46,9 +46,9 @@ namespace server.Repository
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
         }
-        public async Task<Vendor> GetSellerById(int sellerId)
+        public async Task<Vendor> GetProductVendorById(int vendorId)
         {
-            return await _context.Vendors.FirstOrDefaultAsync(s => s.Id == sellerId);
+            return await _context.Vendors.FirstOrDefaultAsync(s => s.Id == vendorId);
         }
     }
 }
