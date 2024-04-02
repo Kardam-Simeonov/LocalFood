@@ -54,7 +54,7 @@ const catalogItems = ref([
 
 // Fetch catalog items from the server at https://localhost:7230/api/products
 const { data } = await useFetch(`https://localhost:7230/api/products`);
-catalogItems.value = data.value['$values'];
+catalogItems.value = data.value;
 console.log(data.value);
 console.log(catalogItems.value);
 

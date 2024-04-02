@@ -21,9 +21,6 @@ namespace server.Data
                 .HasForeignKey(p => p.VendorId);
 
             modelBuilder.Entity<OrderProduct>()
-                .HasKey(op => new { op.OrderId, op.ProductId });
-
-            modelBuilder.Entity<OrderProduct>()
                 .HasOne(op => op.Order)
                 .WithMany(o => o.OrderProducts)
                 .HasForeignKey(op => op.OrderId);

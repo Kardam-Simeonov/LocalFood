@@ -36,9 +36,12 @@ namespace server
                             .AllowAnyHeader();
                     });
             });
-            builder.Services.AddControllers().AddJsonOptions(x =>
-                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve
-            );
+            builder.Services.AddControllersWithViews()
+            .AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
+
 
             var app = builder.Build();
 
