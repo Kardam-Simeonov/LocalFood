@@ -79,7 +79,7 @@ const { data } = await useFetch(`https://localhost:7230/api/products`);
 
 const userProducts = ref([]);
 
-userProducts.value = data.value["$values"].filter(product => product.vendorId === userId.value)
+userProducts.value = data.value.filter(product => product.vendorId === userId.value)
 
 console.log(userProducts.value);
 
