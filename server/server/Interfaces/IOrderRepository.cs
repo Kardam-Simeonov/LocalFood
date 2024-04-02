@@ -6,5 +6,7 @@ namespace server.Interfaces
     {
         Task AddOrder(Order order);
         Task<ICollection<Order>> GetOrdersByVendorId(int id);
+        Task<Order> GetOrderById(int id);
+        Task RemoveOrder(Order order);
     }
 }

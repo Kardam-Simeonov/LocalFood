@@ -34,6 +34,19 @@ namespace server.Controllers
             return Ok(order.Id);
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Remove(int id)
+        {
+            var order = await _orderRepository.GetOrderById(id);
+
+            if (order == null)
+                return NotFound("Product not found");
+
+            await _orderRepository.RemoveOrder(order);
+
+            return Ok();
+        }
+
         [HttpGet("vendor/{vendorId}")]
         public async Task<IActionResult> GetOrdersByVendor(int vendorId)
         {

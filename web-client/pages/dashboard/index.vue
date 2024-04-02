@@ -15,7 +15,7 @@
                             </div>
                         </div>
                     <p class="font-semibold">Deliver to: {{ order.address }}</p>
-                    <button class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 mt-4">Mark as ready for pickup</button>
+                    <button @click="deleteOrder(order.id)" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 mt-4">Mark as ready for pickup</button>
                 </div>
                 <div v-if="userOrders.length === 0"
                     class="border-dashed border-4 border-red-800 rounded-lg p-4 flex flex-col justify-center items-center min-h-[15rem]">
@@ -77,6 +77,18 @@ try{
   });
   // Remove the deleted product from the userProducts array
   userProducts.value = userProducts.value.filter(product => product.id !== id);
+} catch (error){
+    console.log(error);
+}
+};
+
+const deleteOrder = async (id) => {
+try{
+  await $fetch(`https://localhost:7230/api/orders/${id}`, {
+    method: 'DELETE',
+  });
+  // Remove the deleted product from the userProducts array
+  userOrders.value = userOrders.value.filter(order => order.id !== id);
 } catch (error){
     console.log(error);
 }

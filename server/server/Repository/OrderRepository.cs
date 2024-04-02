@@ -27,5 +27,14 @@ namespace server.Repository
                 .Where(o => o.OrderProducts.Any(op => op.Product.VendorId == id))
                 .ToListAsync();
         }
+        public async Task<Order> GetOrderById(int id)
+        {
+            return await _context.Orders.FirstOrDefaultAsync(o => o.Id == id);
+        }
+        public async Task RemoveOrder(Order order)
+        {
+            _context.Orders.Remove(order);
+            await _context.SaveChangesAsync();
+        }
     }
 }
