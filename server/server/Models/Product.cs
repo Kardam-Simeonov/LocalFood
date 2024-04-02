@@ -8,5 +8,6 @@
         public double Distance { get; set; }
         public int VendorId { get; set; }
         public Vendor Vendor { get; set; }
+        public ICollection<OrderProduct> OrderProducts { get; set; }
     }
 }

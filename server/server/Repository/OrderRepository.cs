@@ -22,8 +22,9 @@ namespace server.Repository
         public async Task<ICollection<Order>> GetOrdersByVendorId(int id)
         {
             return await _context.Orders
-                .Include(o => o.Products)
-                .Where(o => o.Products.Any(p => p.VendorId == id))
+                .Include(o => o.OrderProducts)
+                .ThenInclude(op => op.Product)
+                .Where(o => o.OrderProducts.Any(op => op.Product.VendorId == id))
                 .ToListAsync();
         }
     }

@@ -23,13 +23,9 @@ namespace server.Controllers
             var order = new Order
             {
                 Address = orderDto.Address,
-                Products = orderDto.Products.Select(productDto => new Product
+                OrderProducts = orderDto.Products.Select(productDto => new OrderProduct
                 {
-                    Id = productDto.Id,
-                    Name = productDto.Name,
-                    Price = productDto.Price,
-                    Distance = productDto.Distance,
-                    VendorId = productDto.VendorId
+                    ProductId = productDto.Id
                 }).ToList()
             };
 
@@ -45,7 +41,7 @@ namespace server.Controllers
             var filteredOrders = orders.Select(o => new Order
             {
                 Id = o.Id,
-                Products = o.Products.Where(p => p.VendorId == vendorId).ToList(),
+                OrderProducts = o.OrderProducts.Where(op => op.Product.VendorId == vendorId).ToList(),
                 Address = o.Address
             }).ToList();
 
