@@ -8,7 +8,7 @@
                 <div v-for="(order, index) in userOrders" :key="index" class="bg-white shadow-lg rounded-lg p-6 mb-6">
                     <div class="font-bold text-xl mb-4">Order #{{ order.id }}</div>
                         <div v-for="(orderProduct, index) in order.orderProducts" :key="index" class="flex items-center mb-4">
-                            <img src="/assets/cheese.jpg" alt="${product.ImageName}" class="w-16 h-16 object-cover rounded-lg mr-4">
+                            <img src="/assets/cheese.jpg" class="w-16 h-16 object-cover rounded-lg mr-4">
                             <div>
                                 <div class="font-bold">{{ orderProduct.product.name }}</div>
                                 <div class="text-gray-600">${{ orderProduct.product.price.toFixed(2) }}</div>
@@ -61,6 +61,8 @@ const { data: productsData } = await useFetch(`https://localhost:7230/api/produc
 const userProducts = ref([]);
 
 userProducts.value = productsData.value.filter(product => product.vendorId === userId.value)
+
+console.log(userProducts.value);
 
 const { data: ordersData } = await useFetch(`https://localhost:7230/api/orders/vendor/${userId.value}`);
 

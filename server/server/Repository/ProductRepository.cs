@@ -28,6 +28,7 @@ namespace server.Repository
                 Name = p.Name,
                 Price = p.Price,
                 Distance = p.Distance,
+                Image = p.Image,
                 VendorId = p.VendorId,
                 VendorName = p.Vendor.Name
             }).ToList();
