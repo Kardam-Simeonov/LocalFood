@@ -13,13 +13,13 @@
               <input type="file" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer" accept="image/png, image/gif, image/jpeg">
           </div>
           <div class="mb-4">
-            <label class="block text-gray-700 font-bold mb-2" for="username">
-              Full Name
+            <label class="block text-gray-700 font-bold mb-2" for="name">
+              Name
             </label>
             <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                   id="username"
+                   id="name"
                    type="text"
-                   placeholder="Full Name"
+                   placeholder="Name"
                    v-model="user.name">
           </div>
           <div class="mb-4">

@@ -44,6 +44,15 @@ namespace server.Controllers
                 PasswordSalt = passwordSalt
             };
 
+            if (request.Image != null && request.Image.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await request.Image.CopyToAsync(memoryStream);
+                    newUser.Image = memoryStream.ToArray();
+                }
+            }
+
             // Add the user to the database
             _context.Vendors.Add(newUser);
             await _context.SaveChangesAsync();

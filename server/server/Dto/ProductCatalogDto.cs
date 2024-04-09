@@ -9,5 +9,6 @@
         public byte[] Image { get; set; }
         public int VendorId { get; set; }
         public string VendorName { get; set; }
+        public byte[] VendorImage { get; set; }
     }
 }

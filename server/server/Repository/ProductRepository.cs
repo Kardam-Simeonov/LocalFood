@@ -30,7 +30,8 @@ namespace server.Repository
                 Distance = p.Distance,
                 Image = p.Image,
                 VendorId = p.VendorId,
-                VendorName = p.Vendor.Name
+                VendorName = p.Vendor.Name,
+                VendorImage = p.Vendor.Image,
             }).ToList();
         }
         public async Task<Product> GetProductById(int id)
