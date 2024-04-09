@@ -8,8 +8,8 @@
                                 <Icon name="bi:plus" class="text-white text-3xl" />
                             </div>
                         </div>
-                        <div id="image-preview" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer bg-cover bg-center"></div>
-                        <input type="file" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer" accept="image/png, image/gif, image/jpeg">
+                        <img :src="imagePreview" :class="{ 'opacity-0': !imagePreview }" class="absolute inset-0 w-full h-full cursor-pointer object-cover object-center">
+                        <input type="file" @change="onFileChange" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer" accept="image/png, image/gif, image/jpeg">
                     </div>
                     <input type="text" class="text-xl font-bold mb-8" placeholder="Product Title" v-model="product.name">
                     <div class="relative mb-8">
@@ -28,19 +28,45 @@ const product = ref({
   name: '',
   price: '', 
   sellerId: '',
+  image: null,
 });
+const imagePreview = ref(null);
 const errorText = ref('');
 const router = useRouter();
 const userId = useCookie('userId');
 
+const onFileChange = (e) => {
+  product.value.image = e.target.files[0];
+  console.log(product.value.image);
+  previewImage(e.target.files[0]);
+};
+
+const previewImage = (file) => {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    imagePreview.value = e.target.result;
+  };
+  reader.readAsDataURL(file);
+};
+
 const addProduct = async () => {
   try {
-    console.log(userId.value)
+    const formData = new FormData();
+    formData.append('name', product.value.name);
+    formData.append('price', product.value.price);
+    formData.append('vendorId', userId.value);
+    formData.append('image', product.value.image);
+
     const data = await $fetch('https://localhost:7230/api/products', {
       method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: product.value.name, price: product.value.price, vendorId: userId.value }),
+      body: formData,
     });
+    // console.log(userId.value)
+    // const data = await $fetch('https://localhost:7230/api/products', {
+    //   method: 'post',
+    //   headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify({ name: product.value.name, price: product.value.price, vendorId: userId.value }),
+    // });
 
     if (data) {
         // Handle success response 
