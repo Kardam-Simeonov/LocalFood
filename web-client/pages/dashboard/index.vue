@@ -27,7 +27,7 @@
             <h1 class="text-4xl font-bold text-center mb-16 text-red-700">Your Products</h1>
             <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 max-w-5xl px-4 mx-auto">
                 <div v-for="(product, index) in userProducts" :key="index" class="bg-red-500 rounded-lg p-4 flex flex-col justify-between relative">
-                    <img src="/assets/cheese.jpg" alt="Product Image" class="w-full h-56 object-cover rounded-lg mb-6">
+                    <img :src="'data:image/jpeg;base64,' + product.image" alt="Product Image" class="w-full h-56 object-cover rounded-lg mb-6">
                     <h2 class="text-xl font-bold">{{ product.name }}</h2>
                     <p class="text-lg font-semibold mt-14 mb-4">${{ product.price.toFixed(2) }}</p>
                     <button @click="deleteProduct(product.id)" class="absolute bottom-4 right-4 bg-red-700 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">Delete</button>
