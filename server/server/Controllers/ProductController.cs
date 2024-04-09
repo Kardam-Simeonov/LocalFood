@@ -48,6 +48,15 @@ namespace server.Controllers
                 Vendor = vendor
             };
 
+            if (productDto.Image != null && productDto.Image.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await productDto.Image.CopyToAsync(memoryStream);
+                    product.Image = memoryStream.ToArray();
+                }
+            }
+
             await _productRepository.AddProduct(product);
 
             return Ok(product);
