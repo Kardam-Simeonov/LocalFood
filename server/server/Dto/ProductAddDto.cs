@@ -5,5 +5,6 @@
         public string Name { get; set; }
         public double Price { get; set; }
         public int VendorId { get; set; }
+        public IFormFile Image { get; set; }
     }
 }
