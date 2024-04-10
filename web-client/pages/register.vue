@@ -9,8 +9,8 @@
                       <Icon name="bi:plus" class="text-white text-3xl" />
                   </div>
               </div>
-              <div id="image-preview" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer bg-cover bg-center"></div>
-              <input type="file" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer" accept="image/png, image/gif, image/jpeg">
+              <img :src="imagePreview" :class="{ 'opacity-0': !imagePreview }" class="absolute inset-0 w-full h-full cursor-pointer object-cover object-center">
+              <input @change="onFileChange" type="file" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer" accept="image/png, image/gif, image/jpeg">
           </div>
           <div class="mb-4">
             <label class="block text-gray-700 font-bold mb-2" for="name">
@@ -57,18 +57,38 @@ const user = ref({
   name: '',
   email: '', 
   password: '',
+  image: null
 });
+const imagePreview = ref(null);
 const errorText = ref('');
 const router = useRouter();
 
+const onFileChange = (e) => {
+  user.value.image = e.target.files[0];
+  console.log(user.value.image);
+  previewImage(e.target.files[0]);
+};
+
+const previewImage = (file) => {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    imagePreview.value = e.target.result;
+  };
+  reader.readAsDataURL(file);
+};
+
 const register = async () => {
-  
-  console.log(JSON.stringify({ email, password }))
+
+  const formData = new FormData();
+    formData.append('name', user.value.name);
+    formData.append('email', user.value.email);
+    formData.append('password', user.value.password);
+    formData.append('image', user.value.image);
+
   try {
     const data = await $fetch('https://localhost:7230/api/auth/register', {
       method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: user.value.name, email: user.value.email, password: user.value.password }), // Ensure body is stringified
+      body: formData
     });
 
     if (data) {
