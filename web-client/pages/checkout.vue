@@ -238,19 +238,27 @@ const computedAddress = computed(() => {
 
 const addProduct = async () => {
     try {
-        console.log(JSON.stringify({ products: items.value, address: computedAddress.value }));
-        const data = await $fetch('https://localhost:7230/api/orders', {
-            method: 'post',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ products: items.value, address: computedAddress.value }),
-        });
+        const encodedAddress = encodeURIComponent(computedAddress.value);
+        const addressData = await $fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}&addressdetails=1&limit=1`);
+        console.log(addressData);
+        if (addressData[0]) {
+            const { lat, lon } = addressData[0];
+            console.log(lat, lon);
 
-        if (data) {
-            // Handle success response 
-            router.push('/');
-        } else {
-           console.log('Something went wrong!');
+            const data = await $fetch('https://localhost:7230/api/orders', {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ products: items.value, address: computedAddress.value, latitude: lat, longitude: lon}),
+            });
+
+            if (data) {
+                // Handle success response 
+                router.push('/');
+            } else {
+                console.log('Something went wrong!');
+            }
         }
+        console.log(JSON.stringify({ products: items.value, address: computedAddress.value }));
     } catch (error) {
         // Handle fetch error
         console.log('Something went wrong!');
