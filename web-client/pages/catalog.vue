@@ -14,7 +14,7 @@
                             <h1 class="text-xl font-semibold mb-2">{{ item.name }}</h1>
                             <span class="flex gap-2">
                                 <img class="w-8 aspect-square rounded-full object-cover object-center"
-                                    src="/assets/profile.jpg">
+                                    :src="'data:image/jpeg;base64,' + item.vendorImage">
                                 <p class="font-semibold">{{ item.vendorName }}</p>
                             </span>
                             <span class="flex justify-between mt-auto">
@@ -33,11 +33,9 @@
 </template>
 
 <script setup>
-import { storeToRefs } from 'pinia'; 
 import { useCartStore } from '~/store/cart'; 
 
 const { addToCart } = useCartStore(); 
-const { items } = storeToRefs(useCartStore()); 
 
 const catalogItems = ref([
 //   {
