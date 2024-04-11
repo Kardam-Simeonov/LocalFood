@@ -257,8 +257,8 @@ const addProduct = async () => {
             } else {
                 console.log('Something went wrong!');
             }
+            console.log(JSON.stringify({ products: items.value, address: computedAddress.value, latitude: lat, longitude: lon }));
         }
-        console.log(JSON.stringify({ products: items.value, address: computedAddress.value }));
     } catch (error) {
         // Handle fetch error
         console.log('Something went wrong!');

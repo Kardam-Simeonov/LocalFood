@@ -23,6 +23,8 @@ namespace server.Controllers
             var order = new Order
             {
                 Address = orderDto.Address,
+                Latitude = orderDto.Latitude,
+                Longitude = orderDto.Longitude,
                 OrderProducts = orderDto.Products.Select(productDto => new OrderProduct
                 {
                     ProductId = productDto.Id
