@@ -253,15 +253,17 @@ const addProduct = async () => {
 
             if (data) {
                 // Handle success response 
-                router.push('/');
+                console.log('Order placed successfully!')
+                clearCart();
+                return navigateTo('/');
             } else {
-                console.log('Something went wrong!');
+                console.log('Something went wrong in the order placement!');
             }
             console.log(JSON.stringify({ products: items.value, address: computedAddress.value, latitude: lat, longitude: lon }));
         }
     } catch (error) {
         // Handle fetch error
-        console.log('Something went wrong!');
+        console.log('Something went wrong! ' + error);
     }
 };
 
@@ -278,8 +280,6 @@ const validateForm = () => {
         Object.values(contactDetails.value).every(field => field.errorText === '')
     ) {
         addProduct();
-        clearCart();
-        return navigateTo('/');
     } else {
         formErrorText.value = '*Please meet all field requirements';
     }

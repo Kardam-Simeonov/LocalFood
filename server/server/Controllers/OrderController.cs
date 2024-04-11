@@ -57,7 +57,9 @@ namespace server.Controllers
             {
                 Id = o.Id,
                 OrderProducts = o.OrderProducts.Where(op => op.Product.VendorId == vendorId).ToList(),
-                Address = o.Address
+                Address = o.Address,
+                Latitude = o.Latitude,
+                Longitude = o.Longitude,
             }).ToList();
 
             return Ok(filteredOrders);

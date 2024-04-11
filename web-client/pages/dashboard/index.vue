@@ -55,6 +55,10 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
+import Feature from 'ol/Feature';
+import Point from 'ol/geom/Point';
+import VectorLayer from 'ol/layer/Vector';
+import VectorSource from 'ol/source/Vector';
 import { fromLonLat } from 'ol/proj';
 
 const userId = useCookie('userId');
@@ -69,8 +73,6 @@ const { data: productsData } = await useFetch(`https://localhost:7230/api/produc
 const userProducts = ref([]);
 
 userProducts.value = productsData.value.filter(product => product.vendorId === userId.value)
-
-console.log(userProducts.value);
 
 const { data: ordersData } = await useFetch(`https://localhost:7230/api/orders/vendor/${userId.value}`);
 
@@ -97,19 +99,23 @@ const deleteOrder = async (id) => {
         await $fetch(`https://localhost:7230/api/orders/${id}`, {
             method: 'DELETE',
         });
-        // Remove the deleted product from the userProducts array
+        // Remove the deleted order from the userOrders array
         userOrders.value = userOrders.value.filter(order => order.id !== id);
+        
+        // Remove the corresponding marker from the map
+        removeMarker(id);
     } catch (error) {
         console.log(error);
     }
 };
 
-console.log(userProducts.value)
-
 const mapRef = ref(null);
+let map;
+let vectorSource;
+let markers = new Map(); // Map to store markers with order IDs
 
 onMounted(() => {
-    const map = new Map({
+    map = new Map({
         target: mapRef.value,
         layers: [
             new TileLayer({
@@ -123,20 +129,38 @@ onMounted(() => {
         controls: [],
     });
 
-    // Loop through each product in the order
-    // userOrders.value.forEach((order) => {
-    //     // Create a new feature with a circle geometry for the order
-    //     const feature = new Feature({
-    //         geometry: new Point(fromLonLat([order.lon, order.lat])),
-    //     });
+    vectorSource = new VectorSource();
+    const vectorLayer = new VectorLayer({
+        source: vectorSource
+    });
+    map.addLayer(vectorLayer);
 
-    //     // Create a new layer with the feature and add it to the map
-    //     const layer = new VectorLayer({
-    //         source: new VectorSource({
-    //             features: [feature],
-    //         }),
-    //     });
-    //     map.addLayer(layer);
-    // });
+    // Add markers for existing orders
+    userOrders.value.forEach(order => {
+        addMarker(order);
+    });
 });
+
+onUnmounted(() => {
+    // Clean up resources when the component is unmounted
+    map = null;
+    vectorSource = null;
+});
+
+const addMarker = (order) => {
+    const orderLocation = fromLonLat([order.longitude, order.latitude]);
+    const marker = new Feature({
+        geometry: new Point(orderLocation)
+    });
+    vectorSource.addFeature(marker);
+    markers.set(order.id, marker); // Associate marker with order ID
+};
+
+const removeMarker = (orderId) => {
+    const marker = markers.get(orderId);
+    if (marker) {
+        vectorSource.removeFeature(marker);
+        markers.delete(orderId);
+    }
+};
 </script>
