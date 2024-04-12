@@ -112,7 +112,6 @@ const deleteOrder = async (id) => {
 const mapRef = ref(null);
 let map;
 let vectorSource;
-let markers = new Map(); // Map to store markers with order IDs
 
 onMounted(() => {
     map = new Map({
@@ -153,14 +152,14 @@ const addMarker = (order) => {
         geometry: new Point(orderLocation)
     });
     vectorSource.addFeature(marker);
-    markers.set(order.id, marker); // Associate marker with order ID
+    map.set(order.id, marker); // Associate marker with order ID
 };
 
 const removeMarker = (orderId) => {
-    const marker = markers.get(orderId);
+    const marker = map.get(orderId);
     if (marker) {
         vectorSource.removeFeature(marker);
-        markers.delete(orderId);
+        map.delete(orderId);
     }
 };
 </script>
