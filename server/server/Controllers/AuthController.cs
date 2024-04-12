@@ -14,7 +14,6 @@ namespace server.Controllers
     [ApiController]
     public class AuthController : Controller
     {
-        //public static Seller seller = new Seller();
         private readonly IConfiguration _configuration;
         private readonly DataContext _context;
 
@@ -40,6 +39,9 @@ namespace server.Controllers
             {
                 Name = request.Name,
                 Email = request.Email,
+                Address = request.Address,
+                Latitude = request.Latitude,
+                Longitude = request.Longitude,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt
             };

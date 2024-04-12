@@ -1,7 +1,7 @@
 <template>
     <main>
         <section class="grid grid-cols-12 xl:h-[90vh]">
-            <div id="map" ref="mapRef" class="xl:col-span-8 col-span-full xl:h-full h-[50vh]"></div>
+            <div ref="mapRef" class="xl:col-span-8 col-span-full xl:h-full h-[50vh]"></div>
             <aside
                 class="xl:col-span-4 col-span-full bg-red-500 xl:h-full h-[70vh] overflow-y-auto px-8 py-12 flex flex-col">
                 <h1 class="text-4xl text-white font-semibold mb-12">Your orders</h1>
