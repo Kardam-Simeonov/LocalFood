@@ -24,6 +24,10 @@
 </template>
 
 <script setup>
+definePageMeta({
+    middleware: 'auth'
+})
+
 const product = ref({
   name: '',
   price: '', 
