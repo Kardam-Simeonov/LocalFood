@@ -36,8 +36,14 @@
                         class="w-full h-56 object-cover rounded-lg mb-6">
                     <h2 class="text-xl font-bold">{{ product.name }}</h2>
                     <p class="text-lg font-semibold mt-14 mb-4">${{ product.price.toFixed(2) }}</p>
-                    <button @click="deleteProduct(product.id)"
-                        class="absolute bottom-4 right-4 bg-red-700 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">Delete</button>
+                    <div class="absolute bottom-4 right-4 flex gap-2">
+                        <NuxtLink :to="'/dashboard/edit/' + product.id">
+                        <button
+                            class="bg-red-700 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">Edit</button>
+                        </NuxtLink>
+                        <button @click="deleteProduct(product.id)"
+                            class="bg-red-700 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">Delete</button>
+                    </div>
                 </div>
                 <NuxtLink to="/dashboard/add">
                     <div
