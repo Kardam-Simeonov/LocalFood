@@ -18,7 +18,6 @@ namespace server.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Product>))]
         public IActionResult GetProducts()
         {
             var products = _productRepository.GetProducts();

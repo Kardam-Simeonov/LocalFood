@@ -21,7 +21,7 @@
                                 <p class="text-xl font-bold">${{ item.price.toFixed(2) }}</p>
                                 <div class="flex items-center gap-2">
                                     <Icon name="fa6-solid:location-arrow" class="text-gray-600 text-lg" />
-                                    <p>{{ item.distance }}km away</p>
+                                    <p>{{ calculateDistance(item) }}</p>
                                 </div>
                             </span>
                         </div>
@@ -34,27 +34,45 @@
 
 <script setup>
 import { useCartStore } from '~/store/cart'; 
+import { useUserStore } from '~/store/user';
 
 const { addToCart } = useCartStore(); 
+const { personalData } = storeToRefs(useUserStore());
 
-const catalogItems = ref([
-//   {
-//     name: 'Homemade Feta Cheese',
-//     price: 5.00,
-//     distance: 1.5,
-//     image: '/assets/cheese.jpg',
-//     seller: {
-//       name: 'Ivan',
-//       image: '/assets/profile.jpg'
-//     }
-//   },
-]);
+const catalogItems = ref([]);
 
 // Fetch catalog items from the server at https://localhost:7230/api/products
 const { data } = await useFetch(`https://localhost:7230/api/products`);
 catalogItems.value = data.value;
-console.log(data.value);
 console.log(catalogItems.value);
+
+// Function to calculate distance between two points using Haversine formula
+const calculateDistance = (item) => {
+    const R = 6371; // Radius of the Earth in kilometers
+    const lat1 = personalData.value.lat;
+    const lon1 = personalData.value.lon;
+    const lat2 = item.latitude;
+    const lon2 = item.longitude;
+
+    console.log(lat1, lon1, lat2, lon2)
+
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
+
+    return distance.toFixed(2) + "km away";
+}
+
+// Function to convert degrees to radians
+const deg2rad = (deg) => {
+    return deg * (Math.PI / 180);
+}
 
 definePageMeta({
   layout: 'cart'
