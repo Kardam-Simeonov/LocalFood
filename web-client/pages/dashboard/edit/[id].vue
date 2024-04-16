@@ -47,6 +47,13 @@ product.value.price = data.value.price;
 product.value.image = data.value.image;
 imagePreview.value = `data:image/jpeg;base64,${data.value.image}`;
 
+// Fetch the image data as a blob
+const response = await fetch(imagePreview.value);
+const blob = await response.blob();
+
+// Create a File object from the blob
+product.value.image = new File([blob], "filename", { type: "image/jpeg" });
+
 const onFileChange = (e) => {
   product.value.image = e.target.files[0];
   console.log(product.value.image);
@@ -64,6 +71,26 @@ const previewImage = (file) => {
 const saveChanges = async () => {
   try {
     const formData = new FormData();
+    formData.append('name', product.value.name);
+    formData.append('price', product.value.price);
+    formData.append('image', product.value.image);
+
+    console.log(formData)
+
+    const data = await $fetch(`https://localhost:7230/api/products/${router.currentRoute.value.params.id}`, {
+      method: 'put',
+      body: formData,
+    });
+
+    console.log(data)
+
+    if (data === '') {
+        // Handle success response 
+        router.push('/dashboard');
+    } else {
+      // Handle error response
+      errorText.value = 'Something went wrong!';
+    }
   } catch (error) {
     // Handle fetch error
     errorText.value = 'Something went wrong!';
