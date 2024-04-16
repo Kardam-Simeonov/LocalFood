@@ -76,7 +76,7 @@ namespace server.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, ProductAddDto productDto)
+        public async Task<IActionResult> Update(int id, ProductUpdateDto productDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

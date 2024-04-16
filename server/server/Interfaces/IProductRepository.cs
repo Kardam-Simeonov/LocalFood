@@ -9,6 +9,6 @@ namespace server.Interfaces
         Task<Product> GetProductById(int id);
         Task AddProduct(Product product);
         Task RemoveProduct(Product product);
-        Task UpdateProductById(Product product, ProductAddDto productDto);
+        Task UpdateProductById(Product product, ProductUpdateDto productDto);
     }
 }
