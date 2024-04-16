@@ -38,8 +38,8 @@
                     <p class="text-lg font-semibold mt-14 mb-4">${{ product.price.toFixed(2) }}</p>
                     <div class="absolute bottom-4 right-4 flex gap-2">
                         <NuxtLink :to="'/dashboard/edit/' + product.id">
-                        <button
-                            class="bg-red-700 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">Edit</button>
+                            <button
+                                class="bg-red-700 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">Edit</button>
                         </NuxtLink>
                         <button @click="deleteProduct(product.id)"
                             class="bg-red-700 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">Delete</button>
@@ -107,7 +107,7 @@ const deleteOrder = async (id) => {
         });
         // Remove the deleted order from the userOrders array
         userOrders.value = userOrders.value.filter(order => order.id !== id);
-        
+
         // Remove the corresponding marker from the map
         removeMarker(id);
     } catch (error) {

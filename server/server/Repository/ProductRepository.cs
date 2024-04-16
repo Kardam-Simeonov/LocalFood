@@ -44,14 +44,27 @@ namespace server.Repository
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
         }
+
+        public async Task UpdateProductById(Product product, ProductAddDto productDto)
+        {
+            product.Name = productDto.Name;
+            product.Price = productDto.Price;
+
+            if (productDto.Image != null && productDto.Image.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await productDto.Image.CopyToAsync(memoryStream);
+                    product.Image = memoryStream.ToArray();
+                }
+            }
+
+            await _context.SaveChangesAsync();
+        }
         public async Task RemoveProduct(Product product)
         {
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
-        }
-        public async Task<Vendor> GetProductVendorById(int vendorId)
-        {
-            return await _context.Vendors.FirstOrDefaultAsync(s => s.Id == vendorId);
         }
     }
 }

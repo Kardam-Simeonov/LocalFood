@@ -12,6 +12,7 @@ namespace server.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
+        private readonly IVendorRepository _vendorRepository;
         public ProductsController(IProductRepository productRepostory)
         {
            _productRepository = productRepostory;
@@ -27,6 +28,19 @@ namespace server.Controllers
 
             return Ok(products);
         }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetProductById(int id)
+        {
+            var product = await _productRepository.GetProductById(id);
+
+            if (product == null)
+                return NotFound("Product not found");
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return Ok(product);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Add(ProductAddDto productDto)
@@ -34,7 +48,7 @@ namespace server.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var vendor = await _productRepository.GetProductVendorById(productDto.VendorId);
+            var vendor = await _vendorRepository.GetVendorById(productDto.VendorId);
 
             if (vendor == null)
                 return NotFound("Vendor not found");
@@ -58,10 +72,26 @@ namespace server.Controllers
 
             await _productRepository.AddProduct(product);
 
-            return Ok(product);
+            return Ok();
         }
 
-        [HttpDelete("{id}")]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, ProductAddDto productDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var product = await _productRepository.GetProductById(id);
+
+            if (product == null)
+                return NotFound("Product not found");
+
+            await _productRepository.UpdateProductById(product, productDto);
+
+            return Ok();
+        }
+
+            [HttpDelete("{id}")]
         public async Task<IActionResult> Remove(int id)
         {
             var product = await _productRepository.GetProductById(id);

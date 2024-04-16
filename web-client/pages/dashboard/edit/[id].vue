@@ -31,13 +31,21 @@ definePageMeta({
 const product = ref({
   name: '',
   price: '', 
-  sellerId: '',
   image: null,
 });
 const imagePreview = ref(null);
 const errorText = ref('');
 const router = useRouter();
 const userId = useCookie('userId');
+
+console.log(router.currentRoute.value.params.id)
+const { data } = await useFetch(`https://localhost:7230/api/products/${router.currentRoute.value.params.id}`);
+console.log(data.value);
+
+product.value.name = data.value.name;
+product.value.price = data.value.price;
+product.value.image = data.value.image;
+imagePreview.value = `data:image/jpeg;base64,${data.value.image}`;
 
 const onFileChange = (e) => {
   product.value.image = e.target.files[0];
@@ -56,29 +64,6 @@ const previewImage = (file) => {
 const saveChanges = async () => {
   try {
     const formData = new FormData();
-    formData.append('name', product.value.name);
-    formData.append('price', product.value.price);
-    formData.append('vendorId', userId.value);
-    formData.append('image', product.value.image);
-
-    const data = await $fetch('https://localhost:7230/api/products', {
-      method: 'post',
-      body: formData,
-    });
-    // console.log(userId.value)
-    // const data = await $fetch('https://localhost:7230/api/products', {
-    //   method: 'post',
-    //   headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ name: product.value.name, price: product.value.price, vendorId: userId.value }),
-    // });
-
-    if (data) {
-        // Handle success response 
-        router.push('/dashboard');
-    } else {
-      // Handle error response
-      errorText.value = 'Something went wrong!';
-    }
   } catch (error) {
     // Handle fetch error
     errorText.value = 'Something went wrong!';
