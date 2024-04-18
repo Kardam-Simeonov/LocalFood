@@ -43,7 +43,7 @@
           class="bg-red-800 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
           Save Changes
         </button>
-        <button
+        <button @click="deleteAccount()"
           class="bg-red-800 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
           Delete Account
         </button>
@@ -53,6 +53,9 @@
 </template>
 
 <script setup>
+import { useAuthStore } from '~/store/auth'; // import the auth store we just created
+
+const { logUserOut } = useAuthStore(); // use authenticateUser action from  auth store
 
 definePageMeta({
   middleware: 'auth'
@@ -138,5 +141,17 @@ const saveChanges = async () => {
   else {
     errorText.value = 'Please enter a valid address!';
   }
+};
+
+const deleteAccount = async () => {
+    try {
+        await $fetch(`https://localhost:7230/api/auth/vendor/${userId.value}`, {
+            method: 'DELETE',
+        });
+        logUserOut();
+        router.push('/');
+    } catch (error) {
+        console.log(error);
+    }
 };
 </script>

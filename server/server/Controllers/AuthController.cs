@@ -106,6 +106,19 @@ namespace server.Controllers
             return Ok();
         }
 
+        [HttpDelete("vendor/{id}")]
+        public async Task<IActionResult> RemoveVendor(int id)
+        {
+            var vendor = await _vendorRepository.GetVendorById(id);
+
+            if (vendor == null)
+                return NotFound("Product not found");
+
+            await _vendorRepository.RemoveVendor(vendor);
+
+            return Ok();
+        }
+
         [HttpGet("vendor/{id}")]
         public async Task<IActionResult> GetVendorById(int id)
         {

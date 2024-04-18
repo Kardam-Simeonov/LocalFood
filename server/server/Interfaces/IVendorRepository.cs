@@ -7,5 +7,6 @@ namespace server.Interfaces
     {
         Task<Vendor> GetVendorById(int vendorId);
         Task UpdateVendorById(Vendor vendor, VendorUpdateDto vendorDto);
+        Task RemoveVendor(Vendor vendor);
     }
 }

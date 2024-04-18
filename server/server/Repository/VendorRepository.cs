@@ -36,5 +36,10 @@ namespace server.Repository
 
             await _context.SaveChangesAsync();
         }
+        public async Task RemoveVendor(Vendor vendor)
+        {
+            _context.Vendors.Remove(vendor);
+            await _context.SaveChangesAsync();
+        }
     }
 }
