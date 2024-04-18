@@ -39,11 +39,11 @@
       </div>
       <p class="text-red-500 text-sm mb-4">{{ errorText }}</p>
       <div class="flex items-start gap-2 mt-2">
-        <button @click="register()"
+        <button @click="saveChanges()"
           class="bg-red-800 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
           Save Changes
         </button>
-        <button @click="register()"
+        <button
           class="bg-red-800 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
           Delete Account
         </button>
@@ -73,8 +73,6 @@ const userId = useCookie('userId');
 
 
 const { data } = await useFetch(`https://localhost:7230/api/auth/vendor/${userId.value}`);
-console.log(`https://localhost:7230/api/auth/vendor/${userId.value}`);
-console.log(data.value);
 
 user.value.name = data.value.name;
 user.value.email = data.value.email;
@@ -102,7 +100,7 @@ const previewImage = (file) => {
   reader.readAsDataURL(file);
 };
 
-const register = async () => {
+const saveChanges = async () => {
   const encodedAddress = encodeURIComponent(user.value.address);
   const data = await $fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}&addressdetails=1&limit=1`);
   console.log(data);
@@ -121,28 +119,24 @@ const register = async () => {
     formData.append('image', user.value.image);
 
     try {
-      const data = await $fetch('https://localhost:7230/api/auth/register', {
-        method: 'post',
+      const data = await $fetch(`https://localhost:7230/api/auth/vendor/${userId.value}`, {
+        method: 'put',
         body: formData
       });
 
-      if (data) {
-        if (data == 'User already exists.') {
-          errorText.value = 'User already exists.';
-        } else {
-          router.push('/dashboard');
-        }
+      if (data === '') {
+        router.push('/dashboard');
       } else {
         // Handle error response
-        errorText.value = 'User already exists.';
+        errorText.value = 'Data from RESPONSE IS NULL!';
       }
     } catch (error) {
       // Handle fetch error
-      errorText.value = 'User already exists.';
+      errorText.value = 'Error caught in try/catch!';
     }
   }
   else {
-    errorText.value = 'Address is invalid.';
+    errorText.value = 'Please enter a valid address!';
   }
 };
 </script>

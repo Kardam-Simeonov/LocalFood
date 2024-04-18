@@ -7,6 +7,7 @@ using server.Data;
 using server.Dto;
 using server.Interfaces;
 using server.Models;
+using server.Repository;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -87,6 +88,22 @@ namespace server.Controllers
             // Create and return JWT token
             string token = CreateToken(user);
             return Ok(new { token = token, userId = user.Id });
+        }
+
+        [HttpPut("vendor/{id}")]
+        public async Task<IActionResult> UpdateVendor(int id, VendorUpdateDto vendorDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var vendor = await _vendorRepository.GetVendorById(id);
+
+            if (vendor == null)
+                return NotFound("Product not found");
+
+            await _vendorRepository.UpdateVendorById(vendor, vendorDto);
+
+            return Ok();
         }
 
         [HttpGet("vendor/{id}")]

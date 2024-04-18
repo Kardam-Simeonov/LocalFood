@@ -6,8 +6,8 @@
             <div class="flex gap-6">
                 <NuxtLink to="/account">
                     <div class="flex items-center gap-2 cursor-pointer bg-gray-100 hover:bg-gray-200 rounded-full px-6 py-1">
-                        <span @click="logout()" class="font-semibold text-base">Hello, Sali Yashar</span>
-                        <img class="w-8 aspect-square object-cover rounded-full" src="/assets/profile.jpg">
+                        <span class="font-semibold text-base">Hello, {{ userName }}</span>
+                        <img class="w-8 aspect-square object-cover rounded-full" :src="imagePreview">
                     </div>
                 </NuxtLink>
                 <div class="flex items-center gap-3 cursor-pointer">
@@ -26,6 +26,14 @@ import { useAuthStore } from '~/store/auth'; // import the auth store we just cr
 const { logUserOut } = useAuthStore(); // use authenticateUser action from  auth store
 
 const router = useRouter();
+const imagePreview = ref(null);
+const userName = ref('');   
+const userId = useCookie('userId');
+
+const { data } = await useFetch(`https://localhost:7230/api/auth/vendor/${userId.value}`);
+imagePreview.value = `data:image/jpeg;base64,${data.value.image}`;
+userName.value = data.value.name;
+
 
 const logout = () => {
   logUserOut();
