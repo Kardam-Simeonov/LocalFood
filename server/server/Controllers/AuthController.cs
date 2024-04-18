@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using server.Data;
 using server.Dto;
+using server.Interfaces;
 using server.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,15 +18,17 @@ namespace server.Controllers
     public class AuthController : Controller
     {
         private readonly IConfiguration _configuration;
+        private readonly IVendorRepository _vendorRepository;
         private readonly DataContext _context;
 
-        public AuthController(DataContext context, IConfiguration configuration)
+        public AuthController(DataContext context, IConfiguration configuration, IVendorRepository vendorRepository)
         {
             this._configuration = configuration;
             this._context = context;
+            _vendorRepository = vendorRepository;
         }
 
-        [HttpPost("register")]
+        [HttpPost("vendor/register")]
         public async Task<ActionResult<Vendor>> Register(UserRegisterDto request)
         {
             // Check if the user already exists
@@ -62,7 +67,7 @@ namespace server.Controllers
             return Ok(newUser);
         }
 
-        [HttpPost("login")]
+        [HttpPost("vendor/login")]
         public async Task<ActionResult<string>> Login(UserLoginDto request)
         {
             // Find the user in the database
@@ -83,7 +88,32 @@ namespace server.Controllers
             string token = CreateToken(user);
             return Ok(new { token = token, userId = user.Id });
         }
-        
+
+        [HttpGet("vendor/{id}")]
+        public async Task<IActionResult> GetVendorById(int id)
+        {
+            var vendor = await _vendorRepository.GetVendorById(id);
+
+            if (vendor == null)
+                return NotFound("Vendor not found");
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var vendorDto = new VendorEditDto
+            {
+                Id = vendor.Id,
+                Name = vendor.Name,
+                Email = vendor.Email,
+                Address = vendor.Address,
+                Latitude = vendor.Latitude,
+                Longitude = vendor.Longitude,
+                Image = vendor.Image
+            };
+
+            return Ok(vendorDto);
+        }
+
         private string CreateToken(Vendor user) 
         {
             List<Claim> claims = new List<Claim>()

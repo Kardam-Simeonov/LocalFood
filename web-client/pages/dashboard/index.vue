@@ -165,7 +165,6 @@ const removeMarker = (orderId) => {
     const marker = map.get(orderId);
     if (marker) {
         vectorSource.removeFeature(marker);
-        map.delete(orderId);
     }
 };
 </script>

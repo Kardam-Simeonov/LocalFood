@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using server.Data;
+using server.Interfaces;
 using server.Models;
 
 namespace server.Repository
 {
-    public class VendorRepository
+    public class VendorRepository : IVendorRepository
     {
         private readonly DataContext _context;
         public VendorRepository(DataContext context)

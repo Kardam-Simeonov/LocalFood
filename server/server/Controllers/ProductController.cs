@@ -13,9 +13,10 @@ namespace server.Controllers
     {
         private readonly IProductRepository _productRepository;
         private readonly IVendorRepository _vendorRepository;
-        public ProductsController(IProductRepository productRepostory)
+        public ProductsController(IProductRepository productRepostory, IVendorRepository vendorRepository)
         {
            _productRepository = productRepostory;
+           _vendorRepository = vendorRepository;
         }
 
         [HttpGet]

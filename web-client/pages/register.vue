@@ -103,7 +103,7 @@ const register = async () => {
     formData.append('image', user.value.image);
 
     try {
-      const data = await $fetch('https://localhost:7230/api/auth/register', {
+      const data = await $fetch('https://localhost:7230/api/auth/vendor/register', {
         method: 'post',
         body: formData
       });
