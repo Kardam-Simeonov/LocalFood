@@ -1,9 +1,9 @@
 <template>
     <main>
-        <section class="grid grid-cols-12 xl:h-[90vh]">
-            <div ref="mapRef" class="xl:col-span-8 col-span-full xl:h-full h-[50vh]"></div>
+        <section class="grid grid-cols-12 xl:h-[85vh] overflow-y-hidden">
+            <div ref="mapRef" class="xl:col-span-8 col-span-full h-[60rem]"></div>
             <aside
-                class="xl:col-span-4 col-span-full bg-red-500 xl:h-full h-[70vh] overflow-y-auto px-8 py-12 flex flex-col">
+                class="xl:col-span-4 col-span-full bg-red-500 xl:h-[85vh] overflow-y-auto px-8 py-12 flex flex-col">
                 <h1 class="text-4xl text-white font-semibold mb-12">Your orders</h1>
                 <div v-for="(order, index) in userOrders" :key="index" class="bg-white shadow-lg rounded-lg p-6 mb-6">
                     <div class="font-bold text-xl mb-4">Order #{{ order.id }}</div>
@@ -124,7 +124,7 @@ onMounted(() => {
         target: mapRef.value,
         layers: [
             new TileLayer({
-                source: new OSM()
+                source: new OSM(),
             })
         ],
         view: new View({

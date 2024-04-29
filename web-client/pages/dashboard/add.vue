@@ -72,7 +72,7 @@ const addProduct = async () => {
     //     body: JSON.stringify({ name: product.value.name, price: product.value.price, vendorId: userId.value }),
     // });
 
-    if (data) {
+    if (data == '') {
         // Handle success response 
         router.push('/dashboard');
     } else {
