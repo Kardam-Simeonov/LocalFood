@@ -1,0 +1,5 @@
+{
+  "appId": "com.localfood.driverapp",
+  "appName": "localfood-driver",
+  "webDir": ".output/public"
+}
