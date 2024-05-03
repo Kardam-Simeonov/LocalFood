@@ -1,14 +1,17 @@
 <template>
   <div class="relative overflow-hidden h-screen">
-    <nav class="relative z-40 h-24 pt-6 pr-8 pl-4 bg-white bg-opacity-90 text-quakeGreen flex justify-between">
-      <div class="flex gap-3">
-        <h1 class="font-bold">LocalFood | Driver</h1>
+    <nav class="relative z-40 h-24 pt-6 px-8 bg-white bg-opacity-90 text-quakeGreen flex justify-between">
+      <div class="flex text-red-700">
+        <div class="w-36 text-xl">
+          <h1 class="font-bold">LocalFood</h1>
+          <p>Driver</p>
       </div>
-      <RouterLink to="/quake-form">
-        <button type="button" class="bg-quakeGreen text-white font-bold h-fit p-3 rounded-xl">Усетих
-          трус
-        </button>
-      </RouterLink>
+    </div>
+      <div class="flex items-center gap-2 cursor-pointer bg-gray-100 hover:bg-gray-200 rounded-full px-6 py-1 mb-4">
+            <span class="font-semibold text-base">Hello, User</span>
+            <img class="w-8 aspect-square object-cover rounded-full" :src="imagePreview">
+      </div>
+
     </nav>
     <main class="flex h-full min-h-screen bg-quakeGreen-background">
       <div id="map" ref="mapRef" class="w-full z-0 absolute inset-0"></div>
@@ -42,17 +45,16 @@
         Data &copy; <a href="https://earthquake.usgs.gov/">SeismicPortal</a>
       </div>
       <section
-        class="absolute z-50 transition-transform duration-500 left-0 right-0 flex flex-col gap-10 h-[64rem] w-full py-6 px-3 bg-white bg-opacity-90 shadow-lg border-t-4 rounded-[2rem]"
+        class="absolute z-50 transition-transform duration-500 left-0 right-0 flex flex-col gap-10 h-[64rem] w-full py-7 px-3 bg-red-500 bg-opacity-95 shadow-lg border-t-4 border-red-400 rounded-[2rem]"
         :style="{ transform: !isTableVisible ? 'translateY(calc(100vh - 11rem))' : 'none' }">
+        <div class="absolute z-10 top-0 w-full h-20" @click="isTableVisible = !isTableVisible"></div>
         <div
-          class="absolute flex justify-center -top-6 left-0 right-0 mx-auto rounded-full w-24 text-4xl font-bold text-quakeGreen border-2 bg-white shadow"
-          @click="isTableVisible = !isTableVisible">
-          <Icon class="mb-1 transition-transform duration-200" icon="fa6-solid:chevron-up"
-            :class="{ 'rotate-180': isTableVisible }" />
+          class="absolute flex justify-center -top-1 left-0 right-0 mx-auto rounded-full w-24 text-4xl font-bold text-red-700">
+          <Icon class="mb-1" icon="fa6-solid:grip-lines"/>
         </div>
-        <h1 class="text-quakeGreen font-bold text-xl text-center drop-shadow-md">Последни земетресения</h1>
+        <h1 class="text-white font-bold text-xl text-center drop-shadow-md">Deliveries in this area</h1>
         <div class="overflow-y-auto" style="height: calc(100vh - 13.5rem); width: 100%">
-          <div class="py-4 border-b-[1px] cursor-pointer" v-for="(quake, index) in quakeData" :key="index">
+          <div class="py-4 mb-4 bg-white rounded-xl cursor-pointer" v-for="(quake, index) in quakeData" :key="index">
             <RouterLink :to="`/earthquake/${quake.id}`">
               <div class="relative flex p-2 gap-5 ">
                 <p class="flex items-center justify-center aspect-square rounded-full text-center text-2xl p-1 w-20 h-20 font-bold text-cyan-700 shadow"

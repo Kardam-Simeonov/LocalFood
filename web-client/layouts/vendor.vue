@@ -2,7 +2,7 @@
     <header class="lg:px-16 px-4 py-6">
         <nav class="flex justify-between">
             <span class="text-red-700 hover:text-red-500 cursor-pointer text-4xl font-bold"
-                style="font-family: calibri;">LocalFood | Vendors</span>
+                style="font-family: calibri;">LocalFood | Vendor</span>
             <div class="flex gap-6">
                 <NuxtLink to="/account">
                     <div class="flex items-center gap-2 cursor-pointer bg-gray-100 hover:bg-gray-200 rounded-full px-6 py-1">
