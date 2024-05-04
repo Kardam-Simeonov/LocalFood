@@ -54,7 +54,22 @@
         </div>
         <h1 class="text-white font-bold text-xl text-center drop-shadow-md">Deliveries in this area</h1>
         <div class="overflow-y-auto" style="height: calc(100vh - 13.5rem); width: 100%">
-          <div class="py-4 mb-4 bg-white rounded-xl cursor-pointer" v-for="(quake, index) in quakeData" :key="index">
+          <div v-for="(order, index) in userOrders" :key="index" class="bg-white shadow-lg rounded-lg p-6 mb-6">
+              <div class="font-bold text-xl mb-4">Order #{{ order.id }}</div>
+              <div v-for="(orderProduct, index) in order.orderProducts" :key="index"
+                  class="flex items-center mb-4">
+                  <img :src="'data:image/jpeg;base64,' + orderProduct.product.image"
+                      class="w-16 h-16 object-cover rounded-lg mr-4">
+                  <div>
+                      <div class="font-bold">{{ orderProduct.product.name }}</div>
+                      <div class="text-gray-600">${{ orderProduct.product.price.toFixed(2) }}</div>
+                  </div>
+              </div>
+              <p class="font-semibold">Deliver to: {{ order.address }}</p>
+              <button @click="deleteOrder(order.id)"
+                  class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 mt-4">View more details</button>
+          </div>
+          <!-- <div class="py-4 mb-4 bg-white rounded-xl cursor-pointer" v-for="(quake, index) in quakeData" :key="index">
             <RouterLink :to="`/earthquake/${quake.id}`">
               <div class="relative flex p-2 gap-5 ">
                 <p class="flex items-center justify-center aspect-square rounded-full text-center text-2xl p-1 w-20 h-20 font-bold text-cyan-700 shadow"
@@ -69,7 +84,7 @@
                 </div>
               </div>
             </RouterLink>
-          </div>
+          </div> -->
         </div>
         <!-- <tr class="h-12 w-full border-y-[1px]" v-for="(quake, index) in quakeData" :key="index">
             <td>{{ index + 1 }}</td>
@@ -138,6 +153,11 @@ function getColorClass(mag) {
     return '#a73b3b';
   }
 }
+
+const { data: ordersData } = await useFetch(`https://localhost:7230/api/orders/vendor/3013`);
+const userOrders = ref([]);
+userOrders.value = ordersData.value;
+console.log(ordersData.value);
 
 // The onMounted hook runs when the component is mounted to the website DOM,
 // it allows us to access the DOM (HTML) elements and initialize the map
