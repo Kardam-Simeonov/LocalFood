@@ -41,8 +41,7 @@
         </div>
       </div>
       <div class="absolute top-24 p-2 m-1 bg-white bg-opacity-40 rounded-lg text-teal-800 text-sm">
-        Tiles &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors<br>
-        Data &copy; <a href="https://earthquake.usgs.gov/">SeismicPortal</a>
+        Tiles &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors
       </div>
       <section
         class="absolute z-50 transition-transform duration-500 left-0 right-0 flex flex-col gap-10 h-[64rem] w-full py-7 px-3 bg-red-500 bg-opacity-95 shadow-lg border-t-4 border-red-400 rounded-[2rem]"
