@@ -153,10 +153,38 @@ function getColorClass(mag) {
   }
 }
 
-const { data: ordersData } = await useFetch(`https://localhost:7230/api/orders/vendor/3013`);
+const { data: ordersData } = await useFetch(`https://localhost:7230/api/orders`);
 const userOrders = ref([]);
-userOrders.value = ordersData.value;
-console.log(ordersData.value);
+
+// Function to split orders by vendor
+function splitProductsByVendor(orders) {
+    const splitOrders = [];
+    orders.forEach(order => {
+        const orderProductsByVendor = {};
+        order.orderProducts.forEach(orderProduct => {
+            const vendorId = orderProduct.product.vendorId;
+            if (!orderProductsByVendor[vendorId]) {
+                // If the vendor ID doesn't exist in the order, create a new array for it
+                orderProductsByVendor[vendorId] = {
+                    id: order.id,
+                    address: order.address,
+                    latitude: order.latitude,
+                    longitude: order.longitude,
+                    vendorId: vendorId,
+                    orderProducts: []
+                };
+            }
+            // Add product to the respective vendor's array
+            orderProductsByVendor[vendorId].orderProducts.push(orderProduct);
+        });
+        // Convert the object into an array and push it to the splitOrders array
+        Object.values(orderProductsByVendor).forEach(order => splitOrders.push(order));
+    });
+    return splitOrders;
+}
+
+userOrders.value = splitProductsByVendor(ordersData.value);
+console.log(userOrders.value);
 
 // The onMounted hook runs when the component is mounted to the website DOM,
 // it allows us to access the DOM (HTML) elements and initialize the map

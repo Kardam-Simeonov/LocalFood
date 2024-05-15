@@ -17,6 +17,17 @@ namespace server.Controllers
             _orderRepository = orderRepository;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetOrders()
+        {
+            var orders = await _orderRepository.GetOrders();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return Ok(orders);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Add(OrderAddDto orderDto)
         {

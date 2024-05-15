@@ -19,6 +19,13 @@ namespace server.Repository
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
         }
+        public async Task<ICollection<Order>> GetOrders()
+        {
+            return await _context.Orders
+                .Include(o => o.OrderProducts)
+                .ThenInclude(op => op.Product)
+                .ToListAsync();
+        }
         public async Task<ICollection<Order>> GetOrdersByVendorId(int id)
         {
             return await _context.Orders
