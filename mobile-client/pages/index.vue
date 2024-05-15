@@ -5,11 +5,11 @@
         <div class="w-36 text-xl">
           <h1 class="font-bold">LocalFood</h1>
           <p>Driver</p>
+        </div>
       </div>
-    </div>
       <div class="flex items-center gap-2 cursor-pointer bg-gray-100 hover:bg-gray-200 rounded-full px-6 py-1 mb-4">
-            <span class="font-semibold text-base">Hello, User</span>
-            <img class="w-8 aspect-square object-cover rounded-full" :src="imagePreview">
+        <span class="font-semibold text-base">Hello, User</span>
+        <img class="w-8 aspect-square object-cover rounded-full" :src="imagePreview">
       </div>
 
     </nav>
@@ -49,24 +49,24 @@
         <div class="absolute z-10 top-0 w-full h-20" @click="isTableVisible = !isTableVisible"></div>
         <div
           class="absolute flex justify-center -top-1 left-0 right-0 mx-auto rounded-full w-24 text-4xl font-bold text-red-700">
-          <Icon class="mb-1" icon="fa6-solid:grip-lines"/>
+          <Icon class="mb-1" icon="fa6-solid:grip-lines" />
         </div>
         <h1 class="text-white font-bold text-xl text-center drop-shadow-md">Deliveries in this area</h1>
         <div class="overflow-y-auto" style="height: calc(100vh - 13.5rem); width: 100%">
           <div v-for="(order, index) in userOrders" :key="index" class="bg-white shadow-lg rounded-lg p-6 mb-6">
-              <div class="font-bold text-xl mb-4">Order #{{ order.id }}</div>
-              <div v-for="(orderProduct, index) in order.orderProducts" :key="index"
-                  class="flex items-center mb-4">
-                  <img :src="'data:image/jpeg;base64,' + orderProduct.product.image"
-                      class="w-16 h-16 object-cover rounded-lg mr-4">
-                  <div>
-                      <div class="font-bold">{{ orderProduct.product.name }}</div>
-                      <div class="text-gray-600">${{ orderProduct.product.price.toFixed(2) }}</div>
-                  </div>
+            <div class="font-bold text-xl mb-4">Order #{{ order.id }}</div>
+            <div v-for="(orderProduct, index) in order.orderProducts" :key="index" class="flex items-center mb-4">
+              <img :src="'data:image/jpeg;base64,' + orderProduct.product.image"
+                class="w-16 h-16 object-cover rounded-lg mr-4">
+              <div>
+                <div class="font-bold">{{ orderProduct.product.name }}</div>
+                <div class="text-gray-600">${{ orderProduct.product.price.toFixed(2) }}</div>
               </div>
-              <p class="font-semibold">Deliver to: {{ order.address }}</p>
-              <button @click="deleteOrder(order.id)"
-                  class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 mt-4">View more details</button>
+            </div>
+            <p class="font-semibold">Deliver to: {{ order.address }}</p>
+            <button @click="deleteOrder(order.id)"
+              class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 mt-4">View
+              more details</button>
           </div>
           <!-- <div class="py-4 mb-4 bg-white rounded-xl cursor-pointer" v-for="(quake, index) in quakeData" :key="index">
             <RouterLink :to="`/earthquake/${quake.id}`">
@@ -158,33 +158,47 @@ const userOrders = ref([]);
 
 // Function to split orders by vendor
 function splitProductsByVendor(orders) {
-    const splitOrders = [];
-    orders.forEach(order => {
-        const orderProductsByVendor = {};
-        order.orderProducts.forEach(orderProduct => {
-            const vendorId = orderProduct.product.vendorId;
-            if (!orderProductsByVendor[vendorId]) {
-                // If the vendor ID doesn't exist in the order, create a new array for it
-                orderProductsByVendor[vendorId] = {
-                    id: order.id,
-                    address: order.address,
-                    latitude: order.latitude,
-                    longitude: order.longitude,
-                    vendorId: vendorId,
-                    orderProducts: []
-                };
-            }
-            // Add product to the respective vendor's array
-            orderProductsByVendor[vendorId].orderProducts.push(orderProduct);
-        });
-        // Convert the object into an array and push it to the splitOrders array
-        Object.values(orderProductsByVendor).forEach(order => splitOrders.push(order));
+  const splitOrders = [];
+  orders.forEach(order => {
+    const orderProductsByVendor = {};
+    order.orderProducts.forEach(orderProduct => {
+      const vendorId = orderProduct.product.vendorId;
+      if (!orderProductsByVendor[vendorId]) {
+        // If the vendor ID doesn't exist in the order, create a new array for it
+        orderProductsByVendor[vendorId] = {
+          id: order.id,
+          address: order.address,
+          latitude: order.latitude,
+          longitude: order.longitude,
+          vendorId: vendorId,
+          orderProducts: []
+        };
+      }
+      // Add product to the respective vendor's array
+      orderProductsByVendor[vendorId].orderProducts.push(orderProduct);
     });
-    return splitOrders;
+    // Convert the object into an array and push it to the splitOrders array
+    Object.values(orderProductsByVendor).forEach(order => splitOrders.push(order));
+  });
+  return splitOrders;
 }
 
 userOrders.value = splitProductsByVendor(ordersData.value);
 console.log(userOrders.value);
+
+// Create a ref to store vendor locations
+const vendorLocations = ref({});
+
+for (const order of userOrders.value) {
+  const vendorId = order.vendorId;
+  if (!vendorLocations.value[vendorId]) {
+    // Fetch vendor location if it's not already stored
+    const { data: response } = await useFetch(`https://localhost:7230/api/auth/vendor/${vendorId}`);
+    vendorLocations.value[vendorId] = [response.value.longitude, response.value.latitude];
+  }
+}
+
+
 
 // The onMounted hook runs when the component is mounted to the website DOM,
 // it allows us to access the DOM (HTML) elements and initialize the map
@@ -342,6 +356,26 @@ onMounted(() => {
     });
 
     map.addLayer(markerLayer);
+
+    // Fetch vendor locations and add markers to the map
+    const vendorMarkerSource = new VectorSource();
+
+
+    console.log(vendorLocations.value);
+
+    for (const order of userOrders.value) {
+      const vendorId = order.vendorId;
+      // Create a new feature for the vendor location
+      const vendorMarker = new Feature({
+        geometry: new Point(fromLonLat(vendorLocations.value[vendorId])),
+      });
+      vendorMarkerSource.addFeature(vendorMarker);
+    }
+    // Create a new layer for the vendor markers and add it to the map
+    const vendorMarkerLayer = new VectorLayer({
+      source: vendorMarkerSource,
+    });
+    map.addLayer(vendorMarkerLayer);
   });
 });
 </script>
