@@ -20,8 +20,8 @@
             <ul class="h-[39rem] overflow-x-hidden overflow-y-auto bg-white text-opacity-90 mx-3 px-4 pt-6 pb-14 flex flex-col gap-2 rounded-lg text-black"
                 :class="{ 'invisible': isLoading }">
                 <li class="mb-4 font-semibold text-xl">Delivery Information</li>
-                <div v-for="(order, index) in userOrders" :key="index" class="ml-2">
-                    <div v-for="(orderProduct, index) in order.orderProducts" :key="index"
+                <div class="ml-2">
+                    <div v-for="(orderProduct, index) in currentOrder.orderProducts" :key="index"
                         class="flex items-center mb-4">
                         <img :src="'data:image/jpeg;base64,' + orderProduct.product.image"
                             class="w-16 h-16 object-cover rounded-lg mr-4">
@@ -124,14 +124,18 @@ const cardContent = ref({
     depth: 0,
 });
 
-const route = useRoute();
-console.log(route.params)
+const route = useRoute(); 
+console.log(route.params.vendor)
 
 
-const { data: ordersData } = await useFetch(`https://localhost:7230/api/orders/vendor/3013`);
-const userOrders = ref([]);
-userOrders.value = ordersData.value;
-console.log(ordersData.value);
+const { data: orderData } = await useFetch(`https://localhost:7230/api/orders/${route.params.order}`);
+const currentOrder = ref([]);
+currentOrder.value = orderData.value;
+console.log(currentOrder.value);
+currentOrder.value.orderProducts = currentOrder.value.orderProducts.filter(orderProduct => orderProduct.product.vendorId == route.params.vendor);
+console.log(currentOrder.value);
+
+const { data: vendor } = await useFetch(`https://localhost:7230/api/auth/vendor/${route.params.vendor}`);
 
 
 // The onMounted hook runs when the component is mounted to the website DOM,
@@ -158,7 +162,7 @@ onMounted(() => {
     });
 
     // Create a new vector layer for the user feedback markers
-    const feedbackMarkerLayer = new VectorLayer({
+    const deliveryLocationsLayer = new VectorLayer({
         source: new VectorSource(),
         style: new Style({
             image: new RegularShape({
@@ -176,8 +180,19 @@ onMounted(() => {
         }),
     });
 
+    console.log([currentOrder.value.latitude, currentOrder.value.longitude]);
+    console.log([vendor.value.latitude, vendor.value.longitude]);
+    const feature1 = new Feature({
+        geometry: new Point(fromLonLat([currentOrder.value.longitude, currentOrder.value.latitude])),
+    });
+    const feature2 = new Feature({
+        geometry: new Point(fromLonLat([vendor.value.longitude, vendor.value.latitude])),
+    });
+
+    deliveryLocationsLayer.getSource().addFeatures([feature1, feature2]);
+
     // Add the offset marker layer to the map
-    map.addLayer(feedbackMarkerLayer);
+    map.addLayer(deliveryLocationsLayer);
 
     isLoading.value = false;
 });
