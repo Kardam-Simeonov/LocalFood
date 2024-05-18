@@ -36,7 +36,10 @@ namespace server.Repository
         }
         public async Task<Order> GetOrderById(int id)
         {
-            return await _context.Orders.FirstOrDefaultAsync(o => o.Id == id);
+            return await _context.Orders
+                .Include(o => o.OrderProducts)
+                .ThenInclude(op => op.Product)
+                .FirstOrDefaultAsync(o => o.Id == id);
         }
         public async Task RemoveOrder(Order order)
         {

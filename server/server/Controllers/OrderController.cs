@@ -28,6 +28,17 @@ namespace server.Controllers
             return Ok(orders);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetOrderById(int id)
+        {
+            var order = await _orderRepository.GetOrderById(id);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return Ok(order);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Add(OrderAddDto orderDto)
         {
