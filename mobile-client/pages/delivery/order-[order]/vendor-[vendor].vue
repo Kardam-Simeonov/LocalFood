@@ -81,12 +81,10 @@
                     Cancel Order
                 </button>
             </RouterLink>
-            <RouterLink class="w-full" to="/">
-                <button type="button"
-                    class="bg-green-500 text-white text-sm font-bold h-full w-full rounded-r-2xl p-3 border-x-2 border-y-2 border-green-400">
-                    Complete Order
-                </button>
-            </RouterLink>
+            <button @click="completeOrder()"
+                class="bg-green-500 text-white text-sm font-bold h-full w-full rounded-r-2xl p-3 border-x-2 border-y-2 border-green-400">
+                Complete Order
+            </button>
         </header>
     </div>
 </template>
@@ -124,18 +122,44 @@ const cardContent = ref({
     depth: 0,
 });
 
-const route = useRoute(); 
+const route = useRoute();
+const router = useRouter();
 console.log(route.params.vendor)
 
 
 const { data: orderData } = await useFetch(`https://localhost:7230/api/orders/${route.params.order}`);
 const currentOrder = ref([]);
 currentOrder.value = orderData.value;
-console.log(currentOrder.value);
 currentOrder.value.orderProducts = currentOrder.value.orderProducts.filter(orderProduct => orderProduct.product.vendorId == route.params.vendor);
-console.log(currentOrder.value);
 
 const { data: vendor } = await useFetch(`https://localhost:7230/api/auth/vendor/${route.params.vendor}`);
+
+async function completeOrder() {
+    for (let orderProduct of currentOrder.value.orderProducts) {
+        console.log(orderProduct);
+        try {
+            await $fetch(`https://localhost:7230/api/orders/${route.params.order}/product/${orderProduct.id}`, {
+                method: 'DELETE',
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const order = await $fetch(`https://localhost:7230/api/orders/${route.params.order}`);
+    
+    if (order.orderProducts.length == 0) {
+        try {
+            await $fetch(`https://localhost:7230/api/orders/${route.params.order}`, {
+                method: 'DELETE',
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    router.push('/');
+}
 
 
 // The onMounted hook runs when the component is mounted to the website DOM,

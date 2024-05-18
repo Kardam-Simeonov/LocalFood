@@ -71,6 +71,19 @@ namespace server.Controllers
             return Ok();
         }
 
+        [HttpDelete("{orderId}/product/{productId}")]
+        public async Task<IActionResult> RemoveOrderProduct(int orderId, int productId)
+        {
+            var orderProduct = await _orderRepository.GetOrderProductById(orderId, productId);
+
+            if (orderProduct == null)
+                return NotFound("OrderProduct not found");
+
+            await _orderRepository.RemoveOrderProduct(orderId, orderProduct);
+
+            return Ok();
+        }
+
         [HttpGet("vendor/{vendorId}")]
         public async Task<IActionResult> GetOrdersByVendor(int vendorId)
         {

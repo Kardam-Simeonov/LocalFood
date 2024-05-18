@@ -41,9 +41,31 @@ namespace server.Repository
                 .ThenInclude(op => op.Product)
                 .FirstOrDefaultAsync(o => o.Id == id);
         }
+        public async Task<OrderProduct> GetOrderProductById(int orderId, int orderProductId)
+        {
+            var order = await _context.Orders
+                .Include(o => o.OrderProducts)
+                .ThenInclude(op => op.Product)
+                .FirstOrDefaultAsync(o => o.Id == orderId);
+
+            return order.OrderProducts
+                .FirstOrDefault(o => o.Id == orderProductId);
+        }
         public async Task RemoveOrder(Order order)
         {
             _context.Orders.Remove(order);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveOrderProduct(int orderId, OrderProduct orderProduct)
+        {
+            var order = await _context.Orders
+                .Include(o => o.OrderProducts)
+                .ThenInclude(op => op.Product)
+                .FirstOrDefaultAsync(o => o.Id == orderId);
+
+            order.OrderProducts.Remove(orderProduct);
+
             await _context.SaveChangesAsync();
         }
     }

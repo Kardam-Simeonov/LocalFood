@@ -8,6 +8,8 @@ namespace server.Interfaces
         Task<ICollection<Order>> GetOrders();
         Task<ICollection<Order>> GetOrdersByVendorId(int id);
         Task<Order> GetOrderById(int id);
+        Task<OrderProduct> GetOrderProductById(int orderId, int orderProductId);
         Task RemoveOrder(Order order);
+        Task RemoveOrderProduct(int orderId, OrderProduct orderProduct);
     }
 }
