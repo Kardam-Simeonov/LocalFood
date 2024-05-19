@@ -23,7 +23,7 @@ jobs:
           include-prerelease: true
 
       - name: Change directory
-        run: cd ./server
+        run: cd ./server/server
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
