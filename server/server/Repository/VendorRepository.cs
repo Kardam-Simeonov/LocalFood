@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure.Core;
+using Microsoft.EntityFrameworkCore;
 using server.Data;
 using server.Dto;
 using server.Interfaces;
@@ -17,7 +18,18 @@ namespace server.Repository
         {
             return await _context.Vendors.FirstOrDefaultAsync(s => s.Id == vendorId);
         }
-        public async Task UpdateVendorById(Vendor vendor, VendorUpdateDto vendorDto)
+        public async Task<Vendor> GetVendorByEmail(string email)
+        {
+            var user = await _context.Vendors.SingleOrDefaultAsync(u => u.Email == email);
+
+            return user;
+        }
+        public async Task AddVendor(Vendor vendor)
+        {
+            _context.Vendors.Add(vendor);
+            await _context.SaveChangesAsync();
+        }
+        public async Task UpdateVendor(Vendor vendor, VendorUpdateDto vendorDto)
         {
             vendor.Name = vendorDto.Name;
             vendor.Email = vendorDto.Email;

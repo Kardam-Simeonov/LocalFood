@@ -12,6 +12,7 @@ namespace server.Data
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
+        public DbSet<Driver> Drivers { get; set; }
         public DbSet<Order> Orders { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
