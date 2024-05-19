@@ -65,6 +65,7 @@ import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
+import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style';
 import { fromLonLat } from 'ol/proj';
 
 const userId = useCookie('userId');
@@ -119,6 +120,7 @@ const updateOrder = async (id) => {
 
         // Remove the order from the userOrders array
         userOrders.value = userOrders.value.filter(order => order.id !== id);
+        removeMarker(id);
     } catch (error) {
         console.log(error);
     }
@@ -145,7 +147,20 @@ onMounted(() => {
 
     vectorSource = new VectorSource();
     const vectorLayer = new VectorLayer({
-        source: vectorSource
+        source: vectorSource,
+        style: new Style({
+        image: new CircleStyle({
+          radius: 10,
+          fill: new Fill({
+            color: '#a5f3fc',
+          }),
+          stroke: new Stroke({
+            color: 'white',
+            width: 1,
+            opacity: 0.1
+          }),
+        }),
+      })
     });
     map.addLayer(vectorLayer);
 

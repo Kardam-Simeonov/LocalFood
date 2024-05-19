@@ -13,7 +13,7 @@
     </header>
     <main>
         <section class="grid grid-cols-12">
-            <div class="col-span-full bg-red-500 h-fit px-16 py-12 flex flex-col">
+            <div class="col-span-full bg-red-500 h-fit lg:px-16 px-4 py-12 flex flex-col">
                 <h1 class="text-4xl font-bold mb-12 text-white">Checkout</h1>
                 <div class="grid grid-cols-12">
                     <div class="lg:col-span-8 col-span-full">

@@ -65,6 +65,10 @@
                 Take order</button>
             </NuxtLink>
           </div>
+          <div v-if="userOrders.length === 0"
+                    class="border-dashed border-4 border-red-800 rounded-lg p-4 flex flex-col justify-center items-center min-h-[15rem]">
+                    <p class="text-white text-center">You have no orders</p>
+                </div>
         </div>
       </section>
     </main>

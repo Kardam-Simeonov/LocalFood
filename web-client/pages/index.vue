@@ -10,7 +10,7 @@
           <input type="text" name="search" id="search"
             ref="searchInput"
             class="w-full block p-4 pr-10 rounded-md shadow-sm text-black sm:text-sm"
-            placeholder="Enter your address...">
+            placeholder="Street Name №, City">
             <span
               @click="getCoordinatesAndRedirect"
               class="absolute inset-y-0 right-0 flex items-center pr-3 text-2xl text-gray-600 hover:text-black cursor-pointer">

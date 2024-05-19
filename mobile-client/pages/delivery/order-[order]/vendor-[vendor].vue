@@ -1,6 +1,20 @@
 <template>
     <div class="relative flex flex-col overflow-hidden h-screen bg-quakeGreen-background">
         <div id="map" ref="mapRef" class="w-full h-screen" :class="{ 'invisible': isLoading }"></div>
+        <div id="overlay" ref="overlayRef" class="relative" :class="{ 'invisible': isLoading }">
+            <div class="flex flex-col relative z-10 bg-white text-sm rounded-lg p-2 w-[12rem]">
+                <p class="flex gap-3 font-semibold">
+                    <Icon :icon="overlayContent.deliveryInformation.icon" class="my-auto" /> {{
+            overlayContent.deliveryInformation.addressType }}
+                </p>
+                <p class="ml-8 mt-2">{{ overlayContent.deliveryInformation.address }}</p>
+            </div>
+            <div class="w-0 h-0 absolute z-0 -bottom-2 left-0 right-0 mx-auto
+                        border-l-[40px] border-l-transparent
+                        border-t-[35px] border-t-white
+                        border-r-[40px] border-r-transparent">
+            </div>
+        </div>
         <section
             class="absolute h-[50rem] flex flex-col w-full bg-red-500 bg-opacity-95 rounded-t-[2.5rem] transition-transform duration-500 border-t-4 border-red-400"
             :style="{ transform: !isCardVisible ? 'translateY(calc(100vh - 8rem))' : 'translateY(calc(100vh - 45rem))' }">
@@ -115,7 +129,7 @@ import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style';
 import { fromLonLat } from 'ol/proj';
 
 definePageMeta({
-  middleware: 'auth'
+    middleware: 'auth'
 })
 
 // const route = useRoute();
@@ -123,6 +137,14 @@ definePageMeta({
 const isLoading = ref(true);
 const mapRef = ref(null);
 const isCardVisible = ref(false);
+const overlayRef = ref(null);
+const overlayContent = ref({
+    deliveryInformation: {
+        icon: '',
+        addressType: '',
+        address: '',
+    }
+});
 
 const route = useRoute();
 const router = useRouter();
@@ -232,15 +254,68 @@ onMounted(() => {
         console.log([vendor.value.latitude, vendor.value.longitude]);
         const feature1 = new Feature({
             geometry: new Point(fromLonLat([currentOrder.value.longitude, currentOrder.value.latitude])),
+            deliveryInformation: {
+                icon: 'fa6-solid:truck-arrow-right',
+                addressType: 'Delivery Address',
+                address: currentOrder.value.address,
+            }
         });
         const feature2 = new Feature({
             geometry: new Point(fromLonLat([vendor.value.longitude, vendor.value.latitude])),
+            deliveryInformation: {
+                icon: 'fa6-solid:truck-arrow-right',
+                addressType: 'Pickup Address',
+                address: vendor.value.address,
+            }
         });
 
         deliveryLocationsLayer.getSource().addFeatures([feature1, feature2]);
 
         // Add the offset marker layer to the map
         map.addLayer(deliveryLocationsLayer);
+
+        // Create a new overlay instance, which will display the earthquake info,
+        // when a marker is clicked
+        const overlay = new Overlay({
+            element: overlayRef.value,
+            positioning: 'bottom-center',
+            offset: [0, -10],
+        });
+
+        // Add the instance to the map
+        map.addOverlay(overlay);
+
+        // When a marker is clicked, get its properties and display them in the overlay
+        map.on('singleclick', (event) => {
+            // Hide the overlay by default,
+            // in case the user clicks on the map, instead of a marker
+            overlay.setPosition(undefined);
+
+            // Get the features (markers) at the clicked position
+            map.forEachFeatureAtPixel(event.pixel, (feature) => {
+                // If there is a feature found at the clicked position
+                if (feature) {
+                    // Center the map view on the clicked feature
+                    const view = map.getView();
+                    view.animate({
+                        center: feature.getGeometry().getCoordinates(),
+                        duration: 1000
+                    });
+
+                    // Get the feature properties
+                    const { deliveryInformation } = feature.getProperties();
+
+                    // If there is no feltScore or damageScore,
+                    // we don't want to display the overlay
+                    if (!deliveryInformation)
+                        return;
+
+                    // Display the overlay and set its content
+                    overlay.setPosition(feature.getGeometry().getCoordinates());
+                    overlayContent.value.deliveryInformation = deliveryInformation;
+                }
+            });
+        });
 
         isLoading.value = false;
     });
