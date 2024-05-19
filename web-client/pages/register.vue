@@ -30,6 +30,14 @@
           id="adress" type="text" placeholder="Address" v-model="user.address">
       </div>
       <div class="mb-4">
+        <label class="block text-gray-700 font-bold mb-2" for="address">
+          Phone Number
+        </label>
+        <input
+          class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="phoneNumber" type="text" placeholder="PhoneNumber" v-model="user.phoneNumber">
+      </div>
+      <div class="mb-4">
         <label class="block text-gray-700 font-bold mb-2" for="email">
           Email
         </label>
@@ -60,6 +68,7 @@
 const user = ref({
   name: '',
   email: '',
+  phoneNumber: '',
   password: '',
   address: '',
   latitude: '',
@@ -97,6 +106,7 @@ const register = async () => {
     formData.append('name', user.value.name);
     formData.append('email', user.value.email);
     formData.append('password', user.value.password);
+    formData.append('phoneNumber', user.value.phoneNumber);
     formData.append('address', user.value.address);
     formData.append('latitude', user.value.latitude);
     formData.append('longitude', user.value.longitude);

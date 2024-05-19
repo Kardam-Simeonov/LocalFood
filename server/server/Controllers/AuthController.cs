@@ -45,6 +45,7 @@ namespace server.Controllers
             {
                 Name = request.Name,
                 Email = request.Email,
+                PhoneNumber = request.PhoneNumber,
                 Address = request.Address,
                 Latitude = request.Latitude,
                 Longitude = request.Longitude,
@@ -135,6 +136,7 @@ namespace server.Controllers
                 Id = vendor.Id,
                 Name = vendor.Name,
                 Email = vendor.Email,
+                PhoneNumber = vendor.PhoneNumber,
                 Address = vendor.Address,
                 Latitude = vendor.Latitude,
                 Longitude = vendor.Longitude,

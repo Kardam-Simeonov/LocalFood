@@ -22,6 +22,7 @@ namespace server.Repository
             vendor.Name = vendorDto.Name;
             vendor.Email = vendorDto.Email;
             vendor.Address = vendorDto.Address;
+            vendor.PhoneNumber = vendorDto.PhoneNumber;
             vendor.Longitude = vendorDto.Longitude;
             vendor.Latitude = vendorDto.Latitude;
 
