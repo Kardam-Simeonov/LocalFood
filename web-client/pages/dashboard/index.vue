@@ -17,7 +17,7 @@
                         </div>
                     </div>
                     <p class="font-semibold">Deliver to: {{ order.address }}</p>
-                    <button @click="deleteOrder(order.id)"
+                    <button @click="updateOrder(order.id)"
                         class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 mt-4">Mark
                         as ready for pickup</button>
                 </div>
@@ -84,7 +84,9 @@ const { data: ordersData } = await useFetch(`https://localhost:7230/api/orders/v
 
 const userOrders = ref([]);
 
-userOrders.value = ordersData.value;
+userOrders.value = ordersData.value.filter(order => 
+    order.orderProducts.length > 0 && !order.orderProducts[0].readyForPickup
+);
 
 console.log(ordersData.value);
 
@@ -110,6 +112,28 @@ const deleteOrder = async (id) => {
 
         // Remove the corresponding marker from the map
         removeMarker(id);
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const updateOrder = async (id) => {
+    try {
+        // For each order product in the order, update the product's readyForPickup status
+        const order = userOrders.value.find(order => order.id === id);
+
+        for (let orderProduct of order.orderProducts) {
+            console.log(orderProduct.readyForPickup);
+            await $fetch(`https://localhost:7230/api/orders/${order.id}/product/${orderProduct.id}`, {
+                method: 'PUT',
+                body: {
+                    readyForPickup: true
+                }
+            });
+        }
+
+        // Remove the order from the userOrders array
+        userOrders.value = userOrders.value.filter(order => order.id !== id);
     } catch (error) {
         console.log(error);
     }

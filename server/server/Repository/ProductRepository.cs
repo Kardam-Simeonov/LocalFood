@@ -45,7 +45,7 @@ namespace server.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateProductById(Product product, ProductUpdateDto productDto)
+        public async Task UpdateProduct(Product product, ProductUpdateDto productDto)
         {
             product.Name = productDto.Name;
             product.Price = productDto.Price;

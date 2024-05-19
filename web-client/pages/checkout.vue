@@ -248,7 +248,7 @@ const addProduct = async () => {
             const data = await $fetch('https://localhost:7230/api/orders', {
                 method: 'post',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ products: items.value, address: computedAddress.value, latitude: lat, longitude: lon}),
+                body: JSON.stringify({ products: items.value, address: computedAddress.value, latitude: lat, longitude: lon, fullName: contactDetails.value.fullName.text, phoneNumber: contactDetails.value.phoneNumber.text, email: contactDetails.value.email.text, floor: deliveryAddress.value.floor.text, apartment: deliveryAddress.value.apartment.text, entrance: deliveryAddress.value.entrance.text, deliveryNote: deliveryAddress.value.note.text}),
             });
 
             if (data) {
@@ -259,7 +259,6 @@ const addProduct = async () => {
             } else {
                 console.log('Something went wrong in the order placement!');
             }
-            console.log(JSON.stringify({ products: items.value, address: computedAddress.value, latitude: lat, longitude: lon }));
         }
     } catch (error) {
         // Handle fetch error

@@ -133,6 +133,10 @@ function splitProductsByVendor(orders) {
 
 userOrders.value = splitProductsByVendor(ordersData.value);
 
+userOrders.value = userOrders.value.filter(order => 
+    order.orderProducts.length > 0 && order.orderProducts[0].readyForPickup
+);
+
 // Create a ref to store vendor locations
 const vendorLocations = ref({});
 

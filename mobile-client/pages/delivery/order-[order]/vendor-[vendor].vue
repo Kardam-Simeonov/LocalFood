@@ -11,7 +11,7 @@
                         class="font-semibold mb-1 ml-2 text-2xl whitespace-normal break-normal text-white drop-shadow-md">
                         Order #4032</h1>
                     <p class="ml-2 truncate text-quakeGreen text-sm flex text-white">
-                        <Icon icon="fa6-solid:location-arrow" class="my-auto mr-3" />Deliver to: 5006 2, Sofia
+                        <Icon icon="fa6-solid:location-arrow" class="my-auto mr-3" />Deliver to: {{ currentOrder.address }}
                     </p>
                 </div>
                 <Icon class="ml-auto w-12 mb-1 text-4xl text-white transition-transform duration-500 drop-shadow-md"
@@ -38,15 +38,15 @@
                     <p class="flex gap-3">
                         <Icon icon="fa6-solid:user" class="my-auto" /> Client Details
                     </p>
-                    <p class="ml-10">Kardam Simeonov</p>
-                    <p class="ml-10">+359 XXXXXXXX</p>
+                    <p class="ml-10">{{ currentOrder.fullName }}</p>
+                    <p class="ml-10">{{ currentOrder.phoneNumber }}</p>
                 </li>
                 <li class="flex flex-col gap-1">
                     <p class="flex gap-3">
                         <Icon icon="fa6-solid:user" class="my-auto" /> Vendor Details
                     </p>
-                    <p class="ml-10">Sali Yashar</p>
-                    <p class="ml-10">+359 XXXXXXXX</p>
+                    <p class="ml-10">{{ vendor.name }}</p>
+                    <p class="ml-10">{{ vendor.phoneNumber }}</p>
                 </li>
                 <li>
                     <h2 class="font-semibold text-lg">Order Details</h2>
@@ -55,19 +55,22 @@
                     <p class="flex gap-3">
                         <Icon icon="fa6-solid:truck-arrow-right" class="my-auto" /> Pickup Address
                     </p>
-                    <p class="ml-10">5006 2, Sofia</p>
+                    <p class="ml-10">{{ vendor.address }}</p>
                 </li>
                 <li class="flex flex-col gap-1">
                     <p class="flex gap-3">
                         <Icon icon="fa6-solid:location-crosshairs" class="my-auto" /> Delivery Address
                     </p>
-                    <p class="ml-10">5006 2, Sofia</p>
+                    <p class="ml-10">{{ currentOrder.address }}</p>
+                    <p v-if="currentOrder.floor != ''" class="ml-10">Floor - {{ currentOrder.floor }}</p>
+                    <p v-if="currentOrder.apartment != ''" class="ml-10">Apartment - {{ currentOrder.apartment }}</p>
+                    <p v-if="currentOrder.entrance != ''" class="ml-10">Entrance - {{ currentOrder.entrance }}</p>
                 </li>
                 <li class="flex flex-col gap-1">
                     <p class="flex gap-3">
                         <Icon icon="fa6-solid:note-sticky" class="my-auto" /> Delivery Note
                     </p>
-                    <p class="ml-10">Please deliver the package to the front door.</p>
+                    <p class="ml-10">{{ currentOrder.deliveryNote == '' ? `This order doesn't have a delivery note` : currentOrder.deliveryNote }}</p>
                 </li>
             </ul>
             <div class="flex" :class="{ 'invisible': isLoading }">

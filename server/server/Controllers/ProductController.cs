@@ -87,12 +87,12 @@ namespace server.Controllers
             if (product == null)
                 return NotFound("Product not found");
 
-            await _productRepository.UpdateProductById(product, productDto);
+            await _productRepository.UpdateProduct(product, productDto);
 
             return Ok();
         }
 
-            [HttpDelete("{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Remove(int id)
         {
             var product = await _productRepository.GetProductById(id);

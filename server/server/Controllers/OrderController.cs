@@ -47,6 +47,13 @@ namespace server.Controllers
                 Address = orderDto.Address,
                 Latitude = orderDto.Latitude,
                 Longitude = orderDto.Longitude,
+                FullName = orderDto.FullName,
+                PhoneNumber = orderDto.PhoneNumber,
+                Email = orderDto.Email,
+                Floor = orderDto.Floor,
+                Apartment = orderDto.Apartment,
+                Entrance = orderDto.Entrance,
+                DeliveryNote = orderDto.DeliveryNote,
                 OrderProducts = orderDto.Products.Select(productDto => new OrderProduct
                 {
                     ProductId = productDto.Id
@@ -80,6 +87,22 @@ namespace server.Controllers
                 return NotFound("OrderProduct not found");
 
             await _orderRepository.RemoveOrderProduct(orderId, orderProduct);
+
+            return Ok();
+        }
+
+        [HttpPut("{orderId}/product/{productId}")]
+        public async Task<IActionResult> UpdateOrderProduct(int orderId, int productId, OrderProductUpdateDto orderDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var product = await _orderRepository.GetOrderProductById(orderId, productId);
+
+            if (product == null)
+                return NotFound("Product not found");
+
+            await _orderRepository.UpdateOrderProduct(product, orderDto);
 
             return Ok();
         }

@@ -1,4 +1,5 @@
-﻿using server.Models;
+﻿using server.Dto;
+using server.Models;
 
 namespace server.Interfaces
 {
@@ -11,5 +12,6 @@ namespace server.Interfaces
         Task<OrderProduct> GetOrderProductById(int orderId, int orderProductId);
         Task RemoveOrder(Order order);
         Task RemoveOrderProduct(int orderId, OrderProduct orderProduct);
+        Task UpdateOrderProduct(OrderProduct product, OrderProductUpdateDto productDto);
     }
 }

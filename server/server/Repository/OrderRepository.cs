@@ -68,5 +68,12 @@ namespace server.Repository
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task UpdateOrderProduct(OrderProduct product, OrderProductUpdateDto productDto)
+        {
+            product.ReadyForPickup = productDto.ReadyForPickup;
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

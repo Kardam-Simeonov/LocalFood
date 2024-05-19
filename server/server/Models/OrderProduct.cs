@@ -7,6 +7,6 @@
         public Order Order { get; set; }
         public int ProductId { get; set; }
         public Product Product { get; set; }
-
+        public bool ReadyForPickup { get; set; }
     }
 }
