@@ -11,7 +11,8 @@
                         class="font-semibold mb-1 ml-2 text-2xl whitespace-normal break-normal text-white drop-shadow-md">
                         Order #4032</h1>
                     <p class="ml-2 truncate text-quakeGreen text-sm flex text-white">
-                        <Icon icon="fa6-solid:location-arrow" class="my-auto mr-3" />Deliver to: {{ currentOrder.address }}
+                        <Icon icon="fa6-solid:location-arrow" class="my-auto mr-3" />Deliver to: {{ currentOrder.address
+                        }}
                     </p>
                 </div>
                 <Icon class="ml-auto w-12 mb-1 text-4xl text-white transition-transform duration-500 drop-shadow-md"
@@ -70,7 +71,8 @@
                     <p class="flex gap-3">
                         <Icon icon="fa6-solid:note-sticky" class="my-auto" /> Delivery Note
                     </p>
-                    <p class="ml-10">{{ currentOrder.deliveryNote == '' ? `This order doesn't have a delivery note` : currentOrder.deliveryNote }}</p>
+                    <p class="ml-10">{{ currentOrder.deliveryNote == '' ? `This order doesn't have a delivery note` :
+            currentOrder.deliveryNote }}</p>
                 </li>
             </ul>
             <div class="flex" :class="{ 'invisible': isLoading }">
@@ -97,6 +99,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { Icon } from '@iconify/vue'
+import { Geolocation } from '@capacitor/geolocation';
 import Map from 'ol/Map';
 import OSM from 'ol/source/OSM';
 import View from 'ol/View';
@@ -116,14 +119,6 @@ import { fromLonLat } from 'ol/proj';
 const isLoading = ref(true);
 const mapRef = ref(null);
 const isCardVisible = ref(false);
-const cardContent = ref({
-    place: 'LOREM IPSUM',
-    mag: 0,
-    time: new Date('2022-01-01T00:00:00'),
-    lon: 0,
-    lat: 0,
-    depth: 0,
-});
 
 const route = useRoute();
 const router = useRouter();
@@ -150,7 +145,7 @@ async function completeOrder() {
     }
 
     const order = await $fetch(`https://localhost:7230/api/orders/${route.params.order}`);
-    
+
     if (order.orderProducts.length == 0) {
         try {
             await $fetch(`https://localhost:7230/api/orders/${route.params.order}`, {
@@ -168,59 +163,82 @@ async function completeOrder() {
 // The onMounted hook runs when the component is mounted to the website DOM,
 // it allows us to access the DOM (HTML) elements and initialize the map
 onMounted(() => {
-    const map = new Map({
-        // Reference the mapRef variable in the template to set the map target
-        target: mapRef.value,
-        // The layers array holds the map data and markers
-        layers: [
-            // Create a new map tile layer from the OpenStreetMap source
-            new TileLayer({
-                source: new OSM()
-            }),
-        ],
-        // The view defines the center and zoom level of the map
-        // We also use the current position of the user to center the map,
-        // and remove any default controls (zoom, rotate, etc.)
-        view: new View({
-            center: fromLonLat([0, 0]),
-            zoom: 7,
-        }),
-        controls: []
-    });
+    const currentPosition = async () => {
+        return await Geolocation.getCurrentPosition();
+    }
 
-    // Create a new vector layer for the user feedback markers
-    const deliveryLocationsLayer = new VectorLayer({
-        source: new VectorSource(),
-        style: new Style({
-            image: new RegularShape({
-                fill: new Fill({
-                    color: '#93c5fd',
+    // When the current position is retrieved, we can initialize the map
+    currentPosition().then(position => {
+        const map = new Map({
+            // Reference the mapRef variable in the template to set the map target
+            target: mapRef.value,
+            // The layers array holds the map data and markers
+            layers: [
+                // Create a new map tile layer from the OpenStreetMap source
+                new TileLayer({
+                    source: new OSM()
                 }),
-                stroke: new Stroke({
-                    color: 'white',
-                    width: 2,
-                }),
-                points: 3,
-                radius: 10,
-                rotation: Math.PI, // rotate the triangle by 180 degrees ;)
+            ],
+            // The view defines the center and zoom level of the map
+            // We also use the current position of the user to center the map,
+            // and remove any default controls (zoom, rotate, etc.)
+            view: new View({
+                center: fromLonLat([position.coords.longitude, position.coords.latitude]),
+                zoom: 12,
             }),
-        }),
+            controls: []
+        });
+
+        // Create a new vector layer for the user feedback markers
+        const deliveryLocationsLayer = new VectorLayer({
+            source: new VectorSource(),
+            style: new Style({
+                image: new RegularShape({
+                    fill: new Fill({
+                        color: '#93c5fd',
+                    }),
+                    stroke: new Stroke({
+                        color: 'white',
+                        width: 2,
+                    }),
+                    points: 3,
+                    radius: 10,
+                    rotation: Math.PI, // rotate the triangle by 180 degrees ;)
+                }),
+            }),
+        });
+
+        // Create a new source for vector markers,
+        // and add a marker at the current position of the user
+        const markerSource = new VectorSource();
+        const marker = new Feature({
+            geometry: new Point(fromLonLat([position.coords.longitude, position.coords.latitude])),
+        });
+        markerSource.addFeature(marker);
+
+        // Create a new layer for the marker,
+        // and add it to the map
+        const markerLayer = new VectorLayer({
+            source: markerSource,
+        });
+
+        map.addLayer(markerLayer);
+
+        console.log([currentOrder.value.latitude, currentOrder.value.longitude]);
+        console.log([vendor.value.latitude, vendor.value.longitude]);
+        const feature1 = new Feature({
+            geometry: new Point(fromLonLat([currentOrder.value.longitude, currentOrder.value.latitude])),
+        });
+        const feature2 = new Feature({
+            geometry: new Point(fromLonLat([vendor.value.longitude, vendor.value.latitude])),
+        });
+
+        deliveryLocationsLayer.getSource().addFeatures([feature1, feature2]);
+
+        // Add the offset marker layer to the map
+        map.addLayer(deliveryLocationsLayer);
+
+        isLoading.value = false;
     });
-
-    console.log([currentOrder.value.latitude, currentOrder.value.longitude]);
-    console.log([vendor.value.latitude, vendor.value.longitude]);
-    const feature1 = new Feature({
-        geometry: new Point(fromLonLat([currentOrder.value.longitude, currentOrder.value.latitude])),
-    });
-    const feature2 = new Feature({
-        geometry: new Point(fromLonLat([vendor.value.longitude, vendor.value.latitude])),
-    });
-
-    deliveryLocationsLayer.getSource().addFeatures([feature1, feature2]);
-
-    // Add the offset marker layer to the map
-    map.addLayer(deliveryLocationsLayer);
-
-    isLoading.value = false;
 });
 </script>

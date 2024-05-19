@@ -102,21 +102,6 @@ const deleteProduct = async (id) => {
     }
 };
 
-const deleteOrder = async (id) => {
-    try {
-        await $fetch(`https://localhost:7230/api/orders/${id}`, {
-            method: 'DELETE',
-        });
-        // Remove the deleted order from the userOrders array
-        userOrders.value = userOrders.value.filter(order => order.id !== id);
-
-        // Remove the corresponding marker from the map
-        removeMarker(id);
-    } catch (error) {
-        console.log(error);
-    }
-};
-
 const updateOrder = async (id) => {
     try {
         // For each order product in the order, update the product's readyForPickup status

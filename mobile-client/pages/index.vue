@@ -176,7 +176,7 @@ onMounted(() => {
       // and remove any default controls (zoom, rotate, etc.)
       view: new View({
         center: fromLonLat([position.coords.longitude, position.coords.latitude]),
-        zoom: 5,
+        zoom: 12,
       }),
       controls: []
     });
