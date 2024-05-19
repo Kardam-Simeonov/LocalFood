@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-red-500 flex justify-center items-center">
-    <div class="bg-white rounded-lg p-8 max-w-md w-full">
+    <div class="bg-white rounded-lg p-6 mx-2 max-w-md w-full">
       <h1 class="text-red-800 text-2xl font-bold mb-8">LocalFood | Register</h1>
       <div class="relative h-28 aspect-square mb-6">
         <div class="absolute inset-0 flex justify-center items-center border-dashed border-2 border-red-800">
@@ -23,11 +23,11 @@
       </div>
       <div class="mb-4">
         <label class="block text-gray-700 font-bold mb-2" for="address">
-          Address
+          Phone Number
         </label>
         <input
           class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          id="adress" type="text" placeholder="Address" v-model="user.address">
+          id="phoneNumber" type="text" placeholder="PhoneNumber" v-model="user.phoneNumber">
       </div>
       <div class="mb-4">
         <label class="block text-gray-700 font-bold mb-2" for="email">
@@ -52,6 +52,9 @@
           Register
         </button>
       </div>
+      <div class="text-center mt-4">
+          <p>Already have an account? <NuxtLink to="/login"><span class="underline hover:no-underline cursor-pointer font-semibold">Login</span></NuxtLink></p>
+      </div>
     </div>
   </div>
 </template>
@@ -60,10 +63,8 @@
 const user = ref({
   name: '',
   email: '',
+  phoneNumber: '',
   password: '',
-  address: '',
-  latitude: '',
-  longitude: '',
   image: null
 });
 const imagePreview = ref(null);
@@ -85,46 +86,32 @@ const previewImage = (file) => {
 };
 
 const register = async () => {
-  const encodedAddress = encodeURIComponent(user.value.address);
-  const data = await $fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}&addressdetails=1&limit=1`);
-  console.log(data);
-  if (data[0]) {
-    const { lat, lon } = data[0];
-    user.value.latitude = lat;
-    user.value.longitude = lon;
+  const formData = new FormData();
+  formData.append('name', user.value.name);
+  formData.append('email', user.value.email);
+  formData.append('password', user.value.password);
+  formData.append('phoneNumber', user.value.phoneNumber);
+  formData.append('image', user.value.image);
 
-    const formData = new FormData();
-    formData.append('name', user.value.name);
-    formData.append('email', user.value.email);
-    formData.append('password', user.value.password);
-    formData.append('address', user.value.address);
-    formData.append('latitude', user.value.latitude);
-    formData.append('longitude', user.value.longitude);
-    formData.append('image', user.value.image);
+  try {
+    const data = await $fetch('https://localhost:7230/api/auth/driver/register', {
+      method: 'post',
+      body: formData
+    });
 
-    try {
-      const data = await $fetch('https://localhost:7230/api/auth/vendor/register', {
-        method: 'post',
-        body: formData
-      });
-
-      if (data) {
-        if (data == 'User already exists.') {
-          errorText.value = 'User already exists.';
-        } else {
-          router.push('/dashboard');
-        }
-      } else {
-        // Handle error response
+    if (data) {
+      if (data == 'User already exists.') {
         errorText.value = 'User already exists.';
+      } else {
+        router.push('/');
       }
-    } catch (error) {
-      // Handle fetch error
+    } else {
+      // Handle error response
       errorText.value = 'User already exists.';
     }
-  }
-  else {
-    errorText.value = 'Address is invalid.';
+  } catch (error) {
+    // Handle fetch error
+    errorText.value = 'User already exists.';
   }
 };
 </script>

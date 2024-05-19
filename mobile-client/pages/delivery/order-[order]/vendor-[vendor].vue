@@ -114,6 +114,10 @@ import Feature from 'ol/Feature';
 import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style';
 import { fromLonLat } from 'ol/proj';
 
+definePageMeta({
+  middleware: 'auth'
+})
+
 // const route = useRoute();
 // const quakeId = ref(route.params.id);
 const isLoading = ref(true);

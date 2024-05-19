@@ -7,10 +7,12 @@
           <p>Driver</p>
         </div>
       </div>
-      <div class="flex items-center gap-2 cursor-pointer bg-gray-100 hover:bg-gray-200 rounded-full px-6 py-1 mb-4">
-        <span class="font-semibold text-base">Hello, User</span>
-        <img class="w-8 aspect-square object-cover rounded-full" :src="imagePreview">
-      </div>
+      <NuxtLink to="/account">
+        <div class="flex items-center gap-3 cursor-pointer bg-gray-100 hover:bg-gray-200 rounded-full px-6 py-1 mb-4">
+          <span class="font-semibold text-sm">Hello,<br>{{ userName }}</span>
+          <img class="w-8 aspect-square object-cover rounded-full" :src="imagePreview">
+        </div>
+      </NuxtLink>
 
     </nav>
     <main class="flex h-full min-h-screen bg-quakeGreen-background">
@@ -86,6 +88,18 @@ import Point from 'ol/geom/Point';
 import Feature from 'ol/Feature';
 import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style';
 import { fromLonLat } from 'ol/proj';
+
+definePageMeta({
+  middleware: 'auth'
+})
+const userId = useCookie('userId');
+
+const imagePreview = ref(null);
+const userName = ref('');   
+
+const { data } = await useFetch(`https://localhost:7230/api/auth/driver/${userId.value}`);
+imagePreview.value = `data:image/jpeg;base64,${data.value.image}`;
+userName.value = data.value.name;
 
 // Variables for the table, which displays earthquake data
 // and the isLoading variable, which hides the map until it loads

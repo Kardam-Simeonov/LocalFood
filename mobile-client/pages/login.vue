@@ -1,6 +1,6 @@
 <template>
     <div class="min-h-screen bg-red-500 flex justify-center items-center">
-        <div class="bg-white rounded-lg p-8 max-w-md w-full">
+        <div class="bg-white rounded-lg p-6 mx-2 max-w-md w-full">
         <h1 class="text-red-800 text-2xl font-bold mb-4">LocalFood | Login</h1>
         <div class="mb-4">
             <label class="block text-gray-700 font-bold mb-2" for="email">
@@ -54,7 +54,7 @@ const login = async () => {
 
   // redirect to dashboard if user is authenticated
   if (authenticated.value) {
-    router.push('/dashboard');
+    router.push('/');
   }
   else{
     errorText.value = 'Invalid username or password';

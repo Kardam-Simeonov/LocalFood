@@ -17,7 +17,7 @@ export const useAuthStore = defineStore('auth', {
 
       console.log(JSON.stringify({ email, password }))
       try {
-        const data : any = await $fetch('https://localhost:7230/api/auth/vendor/login', {
+        const data : any = await $fetch('https://localhost:7230/api/auth/driver/login', {
           method: 'post',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password }), // Ensure body is stringified
