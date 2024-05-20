@@ -3,11 +3,11 @@
         <div id="map" ref="mapRef" class="w-full h-screen" :class="{ 'invisible': isLoading }"></div>
         <div id="overlay" ref="overlayRef" class="relative" :class="{ 'invisible': isLoading }">
             <div class="flex flex-col relative z-10 bg-white text-sm rounded-lg p-2 w-[12rem]">
-                <p class="flex gap-3 font-semibold">
+                <p class="flex gap-3">
                     <Icon :icon="overlayContent.deliveryInformation.icon" class="my-auto" /> {{
             overlayContent.deliveryInformation.addressType }}
                 </p>
-                <p class="ml-8 mt-2">{{ overlayContent.deliveryInformation.address }}</p>
+                <p class="ml-10">{{ overlayContent.deliveryInformation.address }}</p>
             </div>
             <div class="w-0 h-0 absolute z-0 -bottom-2 left-0 right-0 mx-auto
                         border-l-[40px] border-l-transparent

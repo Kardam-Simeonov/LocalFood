@@ -193,8 +193,12 @@ const validateStreet = () => {
 }
 
 const validateNumber = () => {
+    const numberRegex = /^[0-9]+$/;
+
     if (!deliveryAddress.value.number.text.trim()) {
         deliveryAddress.value.number.errorText = '*This field is required';
+    } else if (!numberRegex.test(deliveryAddress.value.number.text.trim())) {
+        deliveryAddress.value.number.errorText = '*Please enter a valid number';
     } else {
         deliveryAddress.value.number.errorText = '';
     }
@@ -217,16 +221,24 @@ const validateFullName = () => {
 }
 
 const validateEmail = () => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
     if (!contactDetails.value.email.text.trim()) {
         contactDetails.value.email.errorText = '*This field is required';
+    } else if (!emailRegex.test(contactDetails.value.email.text.trim())) {
+        contactDetails.value.email.errorText = '*Please enter a valid email address';
     } else {
         contactDetails.value.email.errorText = '';
     }
 }
 
 const validatePhoneNumber = () => {
+    const phoneNumberRegex = /^[0-9]+$/;
+
     if (!contactDetails.value.phoneNumber.text.trim()) {
         contactDetails.value.phoneNumber.errorText = '*This field is required';
+    } else if (!phoneNumberRegex.test(contactDetails.value.phoneNumber.text.trim())) {
+        contactDetails.value.phoneNumber.errorText = '*Please enter a valid phone number';
     } else {
         contactDetails.value.phoneNumber.errorText = '';
     }

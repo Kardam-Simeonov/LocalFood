@@ -85,7 +85,36 @@ const previewImage = (file) => {
   reader.readAsDataURL(file);
 };
 
+const validateEmail = () => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!emailRegex.test(user.value.email.trim())) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+const validatePhoneNumber = () => {
+    const phoneNumberRegex = /^[0-9]+$/;
+
+    if (!phoneNumberRegex.test(user.value.phoneNumber.trim())) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 const register = async () => {
+  if (!validateEmail()){
+    errorText.value = 'Invalid email address.';
+    return;
+  }
+  else if (!validatePhoneNumber()){
+    errorText.value = 'Invalid phone number.';
+    return;
+  }
+
   const formData = new FormData();
   formData.append('name', user.value.name);
   formData.append('email', user.value.email);

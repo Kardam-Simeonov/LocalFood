@@ -93,7 +93,36 @@ const previewImage = (file) => {
   reader.readAsDataURL(file);
 };
 
+const validateEmail = () => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!emailRegex.test(user.value.email.trim())) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+const validatePhoneNumber = () => {
+    const phoneNumberRegex = /^[0-9]+$/;
+
+    if (!phoneNumberRegex.test(user.value.phoneNumber.trim())) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 const register = async () => {
+  if (!validateEmail()){
+    errorText.value = 'Invalid email address.';
+    return;
+  }
+  else if (!validatePhoneNumber()){
+    errorText.value = 'Invalid phone number.';
+    return;
+  }
+
   const encodedAddress = encodeURIComponent(user.value.address);
   const data = await $fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}&addressdetails=1&limit=1`);
   console.log(data);
@@ -126,11 +155,11 @@ const register = async () => {
         }
       } else {
         // Handle error response
-        errorText.value = 'User already exists.';
+        errorText.value = 'Please fill out all fields.';
       }
     } catch (error) {
       // Handle fetch error
-      errorText.value = 'User already exists.';
+      errorText.value = 'Please fill out all fields.';
     }
   }
   else {

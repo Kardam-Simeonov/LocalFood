@@ -49,11 +49,21 @@ const user = ref({
 const errorText = ref('');
 const router = useRouter();
 
+const validateEmail = () => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!emailRegex.test(user.value.email.trim())) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 const login = async () => {
   await authenticateUser(user.value); // call authenticateUser and pass the user object
 
   // redirect to dashboard if user is authenticated
-  if (authenticated.value) {
+  if (authenticated.value && validateEmail()) {
     router.push('/');
   }
   else{
