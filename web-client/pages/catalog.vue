@@ -2,9 +2,9 @@
     <main>
         <section class="grid grid-cols-12">
             <aside
-                class="lg:block hidden col-span-4 bg-[url('/assets/catalog_banner.jpg')] h-screen bg-cover brightness-75 sticky top-0">
+                class="lg:block hidden col-span-4 bg-[url('/assets/catalog_banner.jpg')] min-h-screen bg-cover brightness-75 sticky top-0">
             </aside>
-            <div class="lg:col-span-8 col-span-full bg-red-500 h-screen px-8 py-12 flex flex-col">
+            <div class="lg:col-span-8 col-span-full bg-red-500 px-8 py-12 flex flex-col">
                 <h1 class="text-3xl font-bold mb-12 text-white">Showing {{ catalogItems.length }} offer{{ catalogItems.length > 1 ? 's' : '' }} in your area</h1>
                 <div class="flex flex-col gap-4">
                     <div v-for="(item, index) in catalogItems" :key="index" @click="addToCart(catalogItems[index])" class="grid grid-cols-12 bg-white h-40 rounded-xl shadow-lg max-w-4xl text-gray-700 hover:bg-gray-100 cursor-pointer">
